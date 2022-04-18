@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+
+		<Authors>Rasim Ismatulin</Authors>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Company>Septem Tech</Company>
+		<Product>$(AssemblyName)</Product>
+		<PackageProjectUrl>https://www.septem.tech/</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>Jobs for Notification core</Description>
+		<Copyright>Open source project</Copyright>
+		<RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>Version 2 beta</PackageReleaseNotes>
+		<NeutralLanguage>en</NeutralLanguage>
+		<Version>2.0.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Quartz" Version="3.4.0" />
+	  <PackageReference Include="Septem.Notifications.Abstractions" Version="2.0.0" />
+	  <PackageReference Include="Septem.Notifications.Core" Version="2.0.0" />
+	</ItemGroup>
+
+</Project>

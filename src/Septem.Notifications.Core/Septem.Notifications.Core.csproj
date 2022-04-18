@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
+
+		<Authors>Rasim Ismatulin</Authors>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Company>Septem Tech</Company>
+		<Product>$(AssemblyName)</Product>
+		<PackageProjectUrl>https://www.septem.tech/</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>Notification core service</Description>
+		<Copyright>Open source project</Copyright>
+		<RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>Version 2 beta</PackageReleaseNotes>
+		<NeutralLanguage>en</NeutralLanguage>
+		<Version>2.0.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+		<PackageReference Include="Npgsql" Version="6.0.3" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+		<PackageReference Include="Septem.Notifications.Abstractions" Version="2.0.0" />
+	</ItemGroup>
+
+</Project>
