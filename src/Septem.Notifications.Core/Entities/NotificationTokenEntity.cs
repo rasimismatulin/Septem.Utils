@@ -23,6 +23,7 @@ internal class NotificationTokenEntity
     [StringLength(250)]
     public string Token { get; set; }
 
+    [StringLength(10)]
     public string Language { get; set; }
 
     public NotificationTokenType Type { get; set; }
