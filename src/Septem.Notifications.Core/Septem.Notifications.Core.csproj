@@ -11,25 +11,25 @@
 		<Product>$(AssemblyName)</Product>
 		<PackageProjectUrl>https://www.septem.tech/</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Notification core service</Description>
+		<Description>Septem notification core</Description>
 		<Copyright>Open source project</Copyright>
 		<RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>Version 2 beta</PackageReleaseNotes>
+		<PackageReleaseNotes>Version 3</PackageReleaseNotes>
 		<NeutralLanguage>en</NeutralLanguage>
-		<Version>2.0.2</Version>
+		<Version>3.1.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Npgsql" Version="6.0.3" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
+		<PackageReference Include="Npgsql" Version="6.0.4" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-		<PackageReference Include="Septem.Notifications.Abstractions" Version="2.0.2" />
+		<PackageReference Include="Septem.Notifications.Abstractions" Version="3.1.0" />
 	</ItemGroup>
 
 </Project>

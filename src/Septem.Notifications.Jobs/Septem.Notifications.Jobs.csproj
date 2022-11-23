@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -15,15 +15,15 @@
 		<Copyright>Open source project</Copyright>
 		<RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>Version 2 beta</PackageReleaseNotes>
+		<PackageReleaseNotes>Version 3</PackageReleaseNotes>
 		<NeutralLanguage>en</NeutralLanguage>
-		<Version>2.0.2</Version>
+		<Version>3.1.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Quartz" Version="3.4.0" />
-	  <PackageReference Include="Septem.Notifications.Abstractions" Version="2.0.2" />
-	  <PackageReference Include="Septem.Notifications.Core" Version="2.0.2" />
+		<PackageReference Include="Quartz" Version="3.4.0" />
+		<PackageReference Include="Septem.Notifications.Abstractions" Version="3.1.0" />
+		<PackageReference Include="Septem.Notifications.Core" Version="3.1.0" />
 	</ItemGroup>
 
 </Project>

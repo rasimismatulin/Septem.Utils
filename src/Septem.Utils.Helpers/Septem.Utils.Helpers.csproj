@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>disable</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
 
 		<Authors>Rasim Ismatulin</Authors>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -11,7 +11,7 @@
 		<Product>$(AssemblyName)</Product>
 		<PackageProjectUrl>https://www.septem.tech/</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Abstraction for core notification service</Description>
+		<Description>Some helper classes</Description>
 		<Copyright>Open source project</Copyright>
 		<RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -19,5 +19,11 @@
 		<NeutralLanguage>en</NeutralLanguage>
 		<Version>3.1.0</Version>
 	</PropertyGroup>
-
+	
+	<ItemGroup>
+		<PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
+		<PackageReference Include="System.Management" Version="6.0.0" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
+	</ItemGroup>
 </Project>

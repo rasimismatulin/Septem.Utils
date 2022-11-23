@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <Authors>Rasim Ismatulin</Authors>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>Septem Tech</Company>
+    <Product>$(AssemblyName)</Product>
+    <PackageProjectUrl>https://www.septem.tech/</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Some description</Description>
+    <Copyright>Open source project</Copyright>
+    <RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>Initial</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+</Project>

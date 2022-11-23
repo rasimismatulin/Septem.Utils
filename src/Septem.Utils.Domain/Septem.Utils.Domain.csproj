@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>disable</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
 
 		<Authors>Rasim Ismatulin</Authors>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -11,7 +11,7 @@
 		<Product>$(AssemblyName)</Product>
 		<PackageProjectUrl>https://www.septem.tech/</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Abstraction for core notification service</Description>
+		<Description>Base domain classes</Description>
 		<Copyright>Open source project</Copyright>
 		<RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -19,5 +19,9 @@
 		<NeutralLanguage>en</NeutralLanguage>
 		<Version>3.1.0</Version>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Septem.Utils.Helpers" Version="3.1.0" />
+	</ItemGroup>
 
 </Project>
