@@ -43,7 +43,7 @@ internal class EmailSender : IEmailSender
 
     public async Task SendAsync(string body, EmailLevel level, string subject = null, CancellationToken cancellationToken = default)
     {
-        if (level < Options.MinLevel)
+        if (level < Options.MinLevel || string.IsNullOrWhiteSpace(body))
             return;
 
         try
@@ -113,12 +113,12 @@ internal class EmailSender : IEmailSender
 
     #endregion
 
-    public async ValueTask DisposeAsync()
+    public void Dispose()
     {
         if (_smtpClient is not null)
         {
-            await _smtpClient.DisconnectAsync(true);
-            _smtpClient.Dispose();
+            _smtpClient.Disconnect(true);
+            _smtpClient?.Dispose();
         }
     }
 }

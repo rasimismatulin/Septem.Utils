@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Septem.Utils.EmailSender;
 
-public interface IEmailSender : IAsyncDisposable
+public interface IEmailSender : IDisposable
 {
     Task SendAsync(string body, EmailLevel level, string subject = null, CancellationToken cancellationToken = default);
 

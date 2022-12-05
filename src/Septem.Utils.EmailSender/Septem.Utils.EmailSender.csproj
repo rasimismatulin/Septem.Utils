@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -11,7 +11,7 @@
 		<Product>$(AssemblyName)</Product>
 		<PackageProjectUrl>https://www.septem.tech/</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Simple static email sender</Description>
+		<Description>Simple email sender</Description>
 		<Copyright>Open source project</Copyright>
 		<RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -21,8 +21,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="MailKit" Version="3.4.2" />
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
+		<PackageReference Include="MailKit" Version="3.4.3" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
 	</ItemGroup>
 </Project>
