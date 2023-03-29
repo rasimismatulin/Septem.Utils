@@ -10,6 +10,11 @@ public static class MappingExpressionExtensions
         where TSource : BaseDomain
         where TDestination : BasePersistenceEntity
     {
+        option
+            .ForMember(dest => dest.CreatedUtc, opt => opt.Ignore())
+            .ForMember(dest => dest.ModifiedUtc, opt => opt.Ignore())
+            .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
+
         return option.AfterMap((src, dest, ctx) =>
         {
             new BaseEntityAfterMapAction<TSource, TDestination>().Process(src, dest, ctx);
