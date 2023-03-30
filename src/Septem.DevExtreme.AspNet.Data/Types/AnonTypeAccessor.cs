@@ -1,6 +1,4 @@
 ﻿using DevExtreme.AspNet.Data.Helpers;
-using System;
-using System.Linq;
 
 namespace DevExtreme.AspNet.Data.Types {
 

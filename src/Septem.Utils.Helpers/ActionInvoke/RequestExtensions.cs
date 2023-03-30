@@ -21,16 +21,19 @@ public static class RequestExtensions
 
     #region Not found
 
-    public static Result AsNotFound(this Request request, params string[] reasons) => new(request.Id, new Issue(IssueOrigin.NotFound, reasons));
+    public static Result AsNotFound(this Request request, params string[] reasons) => 
+        new(request.Id, new Issue(IssueOrigin.NotFound, reasons));
 
     public static Result AsNotFoundFormat(this Request request, string objectName, object objectKey) => 
         new(request.Id, new Issue(IssueOrigin.NotFound, string.Format(IssueResourceManager.GetString("EntityNotFound", request.CultureInfo) ?? "Not localized message", objectName, objectKey)));
 
-    public static Result<T> AsNotFound<T>(this Request request, string objectName, object objectKey) =>
+    public static Result<T> AsNotFound<T>(this Request request, params string[] reasons) => 
+        new(request.Id, new Issue(IssueOrigin.NotFound, reasons));
+
+    public static Result<T> AsNotFoundFormat<T>(this Request request, string objectName, object objectKey) =>
         new(request.Id, new Issue(IssueOrigin.NotFound, string.Format(IssueResourceManager.GetString("EntityNotFound", request.CultureInfo) ?? "Not localized message", objectName, objectKey)));
 
-
-    public static ResultOfCollection<T> AsNotFoundCollection<T>(this Request request, params string[] reasons) =>
+    public static ResultOfCollection<T> AsNotFoundCollection<T>(this Request request, params string[] reasons) => 
         new(request.Id, new Issue(IssueOrigin.NotFound, reasons));
 
     public static ResultOfCollection<T> AsNotFoundCollection<T>(this Request request, string objectName, object objectKey) =>

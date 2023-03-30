@@ -17,11 +17,11 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageReleaseNotes>Version 3</PackageReleaseNotes>
 		<NeutralLanguage>en</NeutralLanguage>
-		<Version>3.1.0</Version>
+		<Version>3.1.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Septem.Utils.Helpers" Version="3.1.0" />
+		<PackageReference Include="Septem.Utils.Helpers" Version="3.4.0" />
 	</ItemGroup>
 
 </Project>

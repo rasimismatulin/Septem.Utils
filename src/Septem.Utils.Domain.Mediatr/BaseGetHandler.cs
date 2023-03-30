@@ -27,12 +27,12 @@ public class BaseGetHandler<TRequest, TDomain, TRepository> : IRequestHandler<TR
     }
 
 
-    public async Task<Result<TDomain>> Handle(TRequest request, CancellationToken cancellationToken)
+    public async virtual Task<Result<TDomain>> Handle(TRequest request, CancellationToken cancellationToken)
     {
         var domain = await Repository.GetAsync<TDomain>(request.Uid, cancellationToken);
 
         if (domain == default)
-            return request.AsNotFound<TDomain>(IssueMessages.ResourceManager.GetString("EntityNotFound", request.CultureInfo));
+            return request.AsNotFoundFormat<TDomain>(typeof(TDomain).Name, request.Uid);
 
         return request.AsResultOf(domain);
     }

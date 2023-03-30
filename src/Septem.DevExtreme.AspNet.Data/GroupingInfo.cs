@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace DevExtreme.AspNet.Data {
+﻿namespace DevExtreme.AspNet.Data {
 
     /// <summary>
     /// Represents a grouping level to be applied to data.

@@ -26,7 +26,7 @@ public class BaseGetCollectionQueryHandler<TRequest, TDomain, TRepository> : IRe
         ServiceProvider = serviceProvider;
     }
 
-    public Task<Result<IQueryable<TDomain>>> Handle(TRequest request, CancellationToken cancellationToken)
+    public virtual Task<Result<IQueryable<TDomain>>> Handle(TRequest request, CancellationToken cancellationToken)
     {
         var query = Repository.CollectionQuery<TDomain>();
         return Task.FromResult(request.AsResultOf(query));

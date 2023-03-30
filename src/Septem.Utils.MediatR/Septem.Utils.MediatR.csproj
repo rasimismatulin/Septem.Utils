@@ -17,7 +17,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageReleaseNotes>Version 3</PackageReleaseNotes>
 		<NeutralLanguage>en</NeutralLanguage>
-		<Version>3.1.0</Version>
+		<Version>3.1.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -25,7 +25,7 @@
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
-		<PackageReference Include="Septem.Utils.Helpers" Version="3.1.0" />
+		<PackageReference Include="Septem.Utils.Helpers" Version="3.4.0" />
 	</ItemGroup>
 
 </Project>

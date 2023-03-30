@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace DevExtreme.AspNet.Data.Aggregation {
+﻿namespace DevExtreme.AspNet.Data.Aggregation {
 
     static class AggregateName {
         public const string

@@ -1,5 +1,4 @@
 ﻿using DevExtreme.AspNet.Data.Aggregation;
-using DevExtreme.AspNet.Data.Async;
 using DevExtreme.AspNet.Data.Helpers;
 using DevExtreme.AspNet.Data.RemoteGrouping;
 using DevExtreme.AspNet.Data.ResponseModel;

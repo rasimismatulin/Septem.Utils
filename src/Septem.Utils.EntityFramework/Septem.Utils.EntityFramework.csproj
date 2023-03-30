@@ -17,14 +17,14 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageReleaseNotes>Version 3</PackageReleaseNotes>
 		<NeutralLanguage>en</NeutralLanguage>
-		<Version>3.1.0</Version>
+		<Version>3.1.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="11.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Septem.Utils.Helpers" Version="3.1.0" />
-		<PackageReference Include="Septem.Utils.Domain" Version="3.1.0" />
+		<PackageReference Include="Septem.Utils.Helpers" Version="3.4.0" />
+		<PackageReference Include="Septem.Utils.Domain" Version="3.1.2" />
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace DevExtreme.AspNet.Data.Helpers {
+﻿namespace DevExtreme.AspNet.Data.Helpers {
 
     /// <summary>
     /// Allows reading object properties.

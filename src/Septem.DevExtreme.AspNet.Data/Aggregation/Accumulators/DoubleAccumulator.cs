@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 
 namespace DevExtreme.AspNet.Data.Aggregation.Accumulators {
 

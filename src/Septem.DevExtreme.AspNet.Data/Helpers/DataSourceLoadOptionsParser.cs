@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-
-namespace DevExtreme.AspNet.Data.Helpers {
+﻿namespace DevExtreme.AspNet.Data.Helpers {
 
     /// <summary>
     /// A parser for the data processing settings.

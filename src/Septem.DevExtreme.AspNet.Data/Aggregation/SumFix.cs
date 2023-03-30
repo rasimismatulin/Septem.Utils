@@ -1,8 +1,6 @@
 ﻿using DevExtreme.AspNet.Data.Aggregation.Accumulators;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace DevExtreme.AspNet.Data.Aggregation {
 

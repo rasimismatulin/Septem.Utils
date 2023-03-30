@@ -1,10 +1,6 @@
 ﻿using DevExtreme.AspNet.Data.Aggregation.Accumulators;
 using DevExtreme.AspNet.Data.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DevExtreme.AspNet.Data.Aggregation {
 
