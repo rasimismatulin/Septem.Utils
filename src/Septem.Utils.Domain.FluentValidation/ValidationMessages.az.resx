@@ -120,9 +120,6 @@
   <data name="AlreadyExists" xml:space="preserve">
     <value>Bu tip element artıq mövcuddur. Təfərüatlar: [Tip = {0}; İD = {1}]</value>
   </data>
-  <data name="BookGuestCountError" xml:space="preserve">
-    <value>Qonaq sayı {0} - {1} aralıqda olmalıdır</value>
-  </data>
   <data name="DateInPast" xml:space="preserve">
     <value>Kecmiş tarix vəya saat. {0} -&gt; {1}</value>
   </data>
@@ -159,8 +156,8 @@
   <data name="MaximumLength" xml:space="preserve">
     <value>{0}' uzunluğu  {2} və ya az olmalıdır</value>
   </data>
-  <data name="MinimumBookGuestCountError" xml:space="preserve">
-    <value>Qonaq sayı {0} - dan/dən çox olmalıdır.</value>
+  <data name="MaxMinError" xml:space="preserve">
+    <value>{2}  {3}-dan çox olmalıdır</value>
   </data>
   <data name="MinimumLength" xml:space="preserve">
     <value>{0}' uzunluğu  {2} və ya çox olmalıdır</value>
@@ -182,12 +179,6 @@
   </data>
   <data name="RepeatTimeLimit" xml:space="preserve">
     <value>Bu əməliyatı {0} saniyədən sonra təkralana bilər</value>
-  </data>
-  <data name="TableBookIntersection" xml:space="preserve">
-    <value>Bu masada mövcud rezerv var [Başlama: {0:HH:mm:ss} -&gt; Son: {1:HH:mm:ss}]</value>
-  </data>
-  <data name="TableNotSelected" xml:space="preserve">
-    <value>Masa secilməyib</value>
   </data>
   <data name="TimeOutOfRange" xml:space="preserve">
     <value>Vaxt səhvdir. Aralıqdan kənara çıxır. [Səhv = {0}]</value>

@@ -70,15 +70,6 @@ namespace Septem.Utils.Domain.FluentValidation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Guest count can be from {0} up to {1}.
-        /// </summary>
-        public static string BookGuestCountError {
-            get {
-                return ResourceManager.GetString("BookGuestCountError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Date or time is in past. {0} -&gt; {1}.
         /// </summary>
         public static string DateInPast {
@@ -196,15 +187,6 @@ namespace Septem.Utils.Domain.FluentValidation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Guest count can be from {0}.
-        /// </summary>
-        public static string MinimumBookGuestCountError {
-            get {
-                return ResourceManager.GetString("MinimumBookGuestCountError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The length of &apos;{0}&apos; must be at least {2} characters..
         /// </summary>
         public static string MinimumLength {
@@ -264,24 +246,6 @@ namespace Septem.Utils.Domain.FluentValidation {
         public static string RepeatTimeLimit {
             get {
                 return ResourceManager.GetString("RepeatTimeLimit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This table already have book [Start: {0:HH:mm:ss} -&gt; End: {1:HH:mm:ss}].
-        /// </summary>
-        public static string TableBookIntersection {
-            get {
-                return ResourceManager.GetString("TableBookIntersection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Table not selected.
-        /// </summary>
-        public static string TableNotSelected {
-            get {
-                return ResourceManager.GetString("TableNotSelected", resourceCulture);
             }
         }
         

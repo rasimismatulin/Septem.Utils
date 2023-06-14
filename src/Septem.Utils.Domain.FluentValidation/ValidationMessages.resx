@@ -120,9 +120,6 @@
   <data name="AlreadyExists" xml:space="preserve">
     <value>Entity with same properties already exists. Details: [Type = {0}; UID = {1}]</value>
   </data>
-  <data name="BookGuestCountError" xml:space="preserve">
-    <value>Guest count can be from {0} up to {1}</value>
-  </data>
   <data name="DateInPast" xml:space="preserve">
     <value>Date or time is in past. {0} -&gt; {1}</value>
   </data>
@@ -162,9 +159,6 @@
   <data name="MaxMinError" xml:space="preserve">
     <value>{2} must be grather than {3}</value>
   </data>
-  <data name="MinimumBookGuestCountError" xml:space="preserve">
-    <value>Guest count can be from {0}</value>
-  </data>
   <data name="MinimumLength" xml:space="preserve">
     <value>The length of '{0}' must be at least {2} characters.</value>
   </data>
@@ -185,12 +179,6 @@
   </data>
   <data name="RepeatTimeLimit" xml:space="preserve">
     <value>This operation can repeat in {0} seconds</value>
-  </data>
-  <data name="TableBookIntersection" xml:space="preserve">
-    <value>This table already have book [Start: {0:HH:mm:ss} -&gt; End: {1:HH:mm:ss}]</value>
-  </data>
-  <data name="TableNotSelected" xml:space="preserve">
-    <value>Table not selected</value>
   </data>
   <data name="TimeOutOfRange" xml:space="preserve">
     <value>Time is out of range [Property = {0}]</value>

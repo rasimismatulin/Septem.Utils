@@ -120,9 +120,6 @@
   <data name="AlreadyExists" xml:space="preserve">
     <value>Объект с данными параметрами уже существует. Детали: [Тип = {0}; UID = {1}]</value>
   </data>
-  <data name="BookGuestCountError" xml:space="preserve">
-    <value>Кол-во гостей может быть от {0} до {1}.</value>
-  </data>
   <data name="DateInPast" xml:space="preserve">
     <value>Дата или время в прошедшем. {0} -&gt; {1}</value>
   </data>
@@ -159,8 +156,8 @@
   <data name="MaximumLength" xml:space="preserve">
     <value>Длинна '{0}' должна быть {2} символа или меньше</value>
   </data>
-  <data name="MinimumBookGuestCountError" xml:space="preserve">
-    <value>Кол-во гостей должно быть больше {0}.</value>
+  <data name="MaxMinError" xml:space="preserve">
+    <value>{3} должен быть больше чем {2}</value>
   </data>
   <data name="MinimumLength" xml:space="preserve">
     <value>Длинна '{0}' должна быть {2} символа или больше</value>
@@ -182,12 +179,6 @@
   </data>
   <data name="RepeatTimeLimit" xml:space="preserve">
     <value>Данную операцию можно повторить через {0} секунд </value>
-  </data>
-  <data name="TableBookIntersection" xml:space="preserve">
-    <value>Для этого стола есть резервацияr [Начало: {0:HH:mm:ss} -&gt; Конец {1:HH:mm:ss}]</value>
-  </data>
-  <data name="TableNotSelected" xml:space="preserve">
-    <value>Стол не выбран</value>
   </data>
   <data name="TimeOutOfRange" xml:space="preserve">
     <value>Неверный диапазон времнин [Свойство = {0}]</value>

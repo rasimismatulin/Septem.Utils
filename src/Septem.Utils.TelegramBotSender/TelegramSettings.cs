@@ -9,4 +9,6 @@ public class TelegramSettings
     public TelegramLevelSettings[] ChatLevels { get; set; }
 
     public bool EnableInDebugLogs { get; set; }
+
+    public string Prefix { get; set; }
 }

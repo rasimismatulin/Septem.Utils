@@ -17,10 +17,12 @@ public class TelegramSender
     private readonly HttpClient _httpClient;
     private readonly Dictionary<LogEventLevel, long> _levelChats;
     private readonly bool _enableInDebugLogs;
+    private readonly string _prefix;
 
     public TelegramSender(TelegramSettings settings)
     {
         _enableInDebugLogs = settings.EnableInDebugLogs;
+        _prefix = settings.Prefix;
         _telegramUrl = string.Format(settings.Url, settings.BotToken);
         _httpClient = new HttpClient();
         _levelChats = new Dictionary<LogEventLevel, long>();
@@ -44,6 +46,9 @@ public class TelegramSender
 
                 message = $"[DEBUG] {message}";
             }
+
+            if (!string.IsNullOrWhiteSpace(_prefix))
+                message = $"[{_prefix}] {message}";
 
             var exists = _levelChats.TryGetValue(level, out var chatId);
             if (!exists)
