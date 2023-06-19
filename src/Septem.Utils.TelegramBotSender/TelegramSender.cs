@@ -48,7 +48,7 @@ public class TelegramSender
             }
 
             if (!string.IsNullOrWhiteSpace(_prefix))
-                message = $"[{_prefix}] {message}";
+                message = $"{_prefix}{message}";
 
             var exists = _levelChats.TryGetValue(level, out var chatId);
             if (!exists)
