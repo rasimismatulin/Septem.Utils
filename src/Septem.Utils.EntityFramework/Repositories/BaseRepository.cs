@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -129,24 +128,19 @@ public class BaseRepository<TEntity, TContext>
 
     #region Get
 
-    public IQueryable<TDomain> CollectionQuery<TDomain>() => GetExistingSet().ProjectTo<TDomain>(Mapper.ConfigurationProvider);
+    public IQueryable<TDomain> CollectionQuery<TDomain>()
+        => GetExistingSet().ProjectTo<TDomain>(Mapper.ConfigurationProvider);
 
     public async Task<TDomain> GetAsync<TDomain>(Guid uid, CancellationToken cancellationToken)
-        where TDomain : BaseDomain
-    {
-        return await GetExistingSet()
+        where TDomain : BaseDomain =>
+        await GetExistingSet()
             .Where(x => x.Uid == uid)
             .ProjectTo<TDomain>(Mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(cancellationToken);
-    }
 
     public async Task<ICollection<TDomain>> GetAllAsync<TDomain>(CancellationToken cancellationToken)
-        where TDomain : BaseDomain
-    {
-        return await GetExistingSet()
-            .ProjectTo<TDomain>(Mapper.ConfigurationProvider)
-            .ToArrayAsync(cancellationToken);
-    }
+        where TDomain : BaseDomain 
+        => await CollectionQuery<TDomain>().ToArrayAsync(cancellationToken);
 
     #endregion
 

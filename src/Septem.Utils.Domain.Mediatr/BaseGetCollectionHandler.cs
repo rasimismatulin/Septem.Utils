@@ -53,7 +53,7 @@ public class BaseGetCollectionHandler<TRequest, TDomain, TRepository> : IRequest
     }
 
 
-    public async Task<ResultOfCollection<TDomain>> Handle(TRequest request, CancellationToken cancellationToken)
+    public virtual async Task<ResultOfCollection<TDomain>> Handle(TRequest request, CancellationToken cancellationToken)
     {
         var domains = await Repository.GetAllAsync<TDomain>(cancellationToken);
         return request.AsResultOfCollection(domains);

@@ -27,7 +27,7 @@ public class BaseGetHandler<TRequest, TDomain, TRepository> : IRequestHandler<TR
     }
 
 
-    public async virtual Task<Result<TDomain>> Handle(TRequest request, CancellationToken cancellationToken)
+    public virtual async Task<Result<TDomain>> Handle(TRequest request, CancellationToken cancellationToken)
     {
         var domain = await Repository.GetAsync<TDomain>(request.Uid, cancellationToken);
 
