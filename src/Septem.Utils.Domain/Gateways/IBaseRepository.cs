@@ -28,7 +28,7 @@ public interface IBaseRepository
     Task<ICollection<TDomain>> GetAllAsync<TDomain>(CancellationToken cancellationToken)
         where TDomain : BaseDomain;
 
-    Task AddAsync<TDomain>(TDomain entity, CancellationToken cancellationToken)
+    void Add<TDomain>(TDomain entity)
         where TDomain : BaseDomain;
 
     Task UpdateAsync<TDomain>(TDomain entity, CancellationToken cancellationToken)

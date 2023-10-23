@@ -29,4 +29,6 @@ public class Issue
     public ICollection<string> Reasons { get; }
 
     public override string ToString() => $"Issue -> [Origin: {Origin}] [Code: {(int)Origin}]\nReasons: [{Reasons.JoinStrings()}]";
+
+    public object GetMessageForException() => $"\nInnerIssue -> [Origin: {Origin}] [Code: {(int)Origin}] Reasons: [{Reasons.JoinStrings()}]\n";
 }

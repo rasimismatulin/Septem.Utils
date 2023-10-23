@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.Internal;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using Septem.Utils.Domain;
 using Septem.Utils.EntityFramework.Entities;
@@ -18,17 +21,79 @@ public class BaseRepository<TEntity, TContext>
     where TEntity : BaseEntity, new()
     where TContext : DbContext
 {
+    public void SyncCollections<TKey, TSource, TElement>(
+        ICollection<TSource> sourceCollection, Func<TSource, TKey> sourceKeySelector,
+        ICollection<TElement> destinationCollection, Func<TElement, TKey> destinationKeySelector,
+        Func<TKey, TElement> newElementFactory)
+    {
+        var valuesCache = destinationCollection.Select(destinationKeySelector).ToHashSet();
+
+        foreach (var item in sourceCollection)
+        {
+            var key = sourceKeySelector(item);
+            if (!valuesCache.Contains(key))
+                destinationCollection.Add(newElementFactory(key));
+            else
+                valuesCache.Remove(key);
+        }
+
+        foreach (var oldItem in valuesCache)
+        {
+            var toRemove = destinationCollection.FirstOrDefault(x => destinationKeySelector(x).Equals(oldItem));
+            if (toRemove is not null)
+                destinationCollection.Remove(toRemove);
+        }
+    }
+    public void SyncCollections<TSource, TElement>(ICollection<TSource> sourceCollection,
+        ICollection<TElement> destinationCollection, Func<Guid, TElement> newElementFactory)
+        where TElement : BaseEntity, new()
+        where TSource : BaseDomain, new()
+    {
+        var valuesCache = destinationCollection.Select(x => x.Uid).ToHashSet();
+
+        foreach (var item in sourceCollection)
+        {
+            if (!valuesCache.Contains(item.Uid))
+                destinationCollection.Add(newElementFactory(item.Uid));
+            else
+                valuesCache.Remove(item.Uid);
+        }
+
+        foreach (var oldItem in valuesCache)
+        {
+            var toRemove = destinationCollection.FirstOrDefault(x => x.Uid == oldItem);
+            destinationCollection.Remove(toRemove);
+        }
+    }
+
+
+    private static readonly Expression<Func<TEntity, bool>> PersistenceDeletedExpression;
     private readonly ICollection<Expression<Func<TEntity, bool>>> _deletionExpressions;
+    protected readonly ICollection<Action> AfterSaveActions = new List<Action>();
 
     protected readonly TContext DbContext;
     protected readonly IMapper Mapper;
-    protected readonly ICollection<Action> AfterSaveActions = new List<Action>();
+
+    static BaseRepository()
+    {
+        if (!typeof(BasePersistenceEntity).IsAssignableFrom(typeof(TEntity)))
+            return;
+
+        var parameter = Expression.Parameter(typeof(TEntity), "e");
+        var isDeletedProperty = Expression.Property(parameter, "IsDeleted");
+        var notDeletedExpressionTree = Expression.Not(isDeletedProperty);
+
+        PersistenceDeletedExpression = Expression.Lambda<Func<TEntity, bool>>(notDeletedExpressionTree, parameter);
+    }
 
     public BaseRepository(TContext dbContext, IMapper mapper)
     {
         DbContext = dbContext;
         Mapper = mapper;
         _deletionExpressions = new List<Expression<Func<TEntity, bool>>>();
+
+        if (PersistenceDeletedExpression != default)
+            AddExistPredicate(PersistenceDeletedExpression);
     }
 
     protected void AddExistPredicate(Expression<Func<TEntity, bool>> predicate) =>
@@ -39,14 +104,15 @@ public class BaseRepository<TEntity, TContext>
         await DbContext.SaveChangesAsync(cancellationToken);
         foreach (var afterSaveAction in AfterSaveActions)
             afterSaveAction.Invoke();
+        AfterSaveActions.Clear();
     }
-
 
     private IDbContextTransaction _transaction;
 
     public async Task BeginTransaction(CancellationToken cancellationToken)
     {
-        _transaction = await DbContext.Database.BeginTransactionAsync(cancellationToken);
+        if (DbContext.Database.CurrentTransaction is null)
+            _transaction = await DbContext.Database.BeginTransactionAsync(cancellationToken);
     }
 
     public async Task CommitTransaction(CancellationToken cancellationToken)
@@ -54,7 +120,6 @@ public class BaseRepository<TEntity, TContext>
         if (_transaction != null)
             await _transaction.CommitAsync(cancellationToken);
     }
-
 
     public async Task WithTransaction(Func<Task> action, CancellationToken cancellationToken)
     {
@@ -118,6 +183,9 @@ public class BaseRepository<TEntity, TContext>
     protected virtual IQueryable<TEntity> GetExistingSet() =>
         _deletionExpressions.Aggregate(DbContext.Set<TEntity>().AsNoTracking(), (current, expr) => current.Where(expr));
 
+    protected virtual IQueryable<TEntity> GetTrackingExistingSet() =>
+        _deletionExpressions.Aggregate(DbContext.Set<TEntity>().AsQueryable(), (current, expr) => current.Where(expr));
+
     public async Task<bool> ExistsAsync(Guid uid, CancellationToken cancellationToken) =>
         await GetExistingSet().AnyAsync(x => x.Uid == uid, cancellationToken);
 
@@ -139,39 +207,27 @@ public class BaseRepository<TEntity, TContext>
             .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<ICollection<TDomain>> GetAllAsync<TDomain>(CancellationToken cancellationToken)
-        where TDomain : BaseDomain 
+        where TDomain : BaseDomain
         => await CollectionQuery<TDomain>().ToArrayAsync(cancellationToken);
 
     #endregion
 
     #region Add
 
-    public virtual async Task AddAsync<TDomain>(TDomain domain, CancellationToken cancellationToken)
+    public virtual void Add<TDomain>(TDomain domain)
         where TDomain : BaseDomain
     {
         var entity = Mapper.Map<TEntity>(domain);
-        await DbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
+        DbContext.Set<TEntity>().Add(entity);
         AfterSaveActions.Add(() => domain.Uid = entity.Uid);
     }
-
-    public async Task AddRangeAsync<TDomain>(IEnumerable<TDomain> domainSource, CancellationToken cancellationToken)
+    
+    public void AddRange<TDomain>(IEnumerable<TDomain> domainSource)
         where TDomain : BaseDomain
     {
-        await DbContext.Set<TEntity>().AddRangeAsync(domainSource.Select(Mapper.Map<TEntity>), cancellationToken);
+        foreach (var domain in domainSource)
+            Add(domain);
     }
-
-
-    //public async Task UpdateAsync<TDomain>(TDomain domain, CancellationToken cancellationToken)
-    //    where TDomain : BaseDomain
-    //{
-    //    var query = _deletionExpressions.Aggregate(DbContext.Set<TEntity>().AsQueryable(), (current, expr) => current.Where(expr));
-    //    var entity = await query.Where(x => x.Uid == domain.Uid).FirstOrDefaultAsync(cancellationToken);
-
-    //    if (entity == default)
-    //        return;
-
-    //    Mapper.Map(domain, entity);
-    //}
 
     public virtual async Task UpdateAsync<TDomain>(TDomain domain, CancellationToken cancellationToken)
         where TDomain : BaseDomain
@@ -252,6 +308,7 @@ public class BaseRepository<TEntity, TContext>
             }
         }
     }
-    #endregion
 
+    #endregion
+    
 }

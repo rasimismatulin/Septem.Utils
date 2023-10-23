@@ -33,7 +33,7 @@ public class BaseCreateHandler<TRequest, TDomain, TRepository> : IRequestHandler
         await Repository.BeginTransaction(cancellationToken);
 
         await PreHandleAsync(request, domain, cancellationToken);
-        await Repository.AddAsync(domain, cancellationToken);
+        Repository.Add(domain);
         await Repository.SaveChangesAsync(cancellationToken);
         await OnSuccessAsync(request, domain, cancellationToken);
 

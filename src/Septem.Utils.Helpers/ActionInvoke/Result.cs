@@ -28,6 +28,12 @@ public class Result
     public bool IsFailure => Issue != null;
 
     public bool IsSuccess => Issue == null;
+
+    public void ThrowIfNotSuccess()
+    {
+        if (IsFailure)
+            throw new Exception("Result in success exception. " + Issue.GetMessageForException());
+    }
 }
 
 public class Result<T> : Result

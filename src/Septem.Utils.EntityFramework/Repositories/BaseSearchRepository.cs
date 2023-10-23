@@ -61,18 +61,6 @@ public class BaseSearchRepository<TEntity, TContext, TSearch> : BaseRepository<T
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     private Expression<Func<TEntity, bool>> GetImplicitSearchExpression(TSearch search)
     {
         Expression<Func<TEntity, bool>> left = null;
@@ -198,7 +186,24 @@ public class BaseSearchRepository<TEntity, TContext, TSearch> : BaseRepository<T
             case SearchOptions.Like:
                 return Expression.Call(Expression.Call(MakeString(left), "ToLower", Type.EmptyTypes), "Contains", Type.EmptyTypes, (Expression)Expression.Constant(value, typeof(string)));
             case SearchOptions.Contains:
-                return Expression.Call(MakeCollection(value), "Contains", Type.EmptyTypes, left);
+                {
+                    var valueType = value.GetType();
+
+                    if (valueType.IsArray)
+                    {
+                        var elementType = valueType.GetElementType()!;
+                        var containsMethod = typeof(Enumerable)
+                            .GetMethods()
+                            .Single(m => m.Name == "Contains" && m.GetParameters().Length == 2)
+                            .MakeGenericMethod(elementType);
+                        
+                        return Expression.Call(containsMethod, Expression.Constant(value, valueType), left);
+                    }
+                    else
+                    {
+                        return Expression.Call(Expression.Constant(value, valueType), "Contains", Type.EmptyTypes, left);
+                    }
+                }
             default:
                 throw new ArgumentOutOfRangeException(nameof(comparison), comparison, null);
         }
@@ -210,11 +215,6 @@ public class BaseSearchRepository<TEntity, TContext, TSearch> : BaseRepository<T
         if ((object)method == null)
             throw new InvalidOperationException();
         return Expression.Call(method, left, Expression.Constant(value, typeof(Guid)));
-    }
-
-    private static Expression MakeCollection(object left)
-    {
-        return Expression.Constant(left, left.GetType());
     }
 
     private static Expression MakeString(Expression source)

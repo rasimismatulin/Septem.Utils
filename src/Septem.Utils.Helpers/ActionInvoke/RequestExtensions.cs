@@ -96,6 +96,13 @@ public static class RequestExtensions
     {
         var initiated = new TInitiated { InitiatorId = request.Id };
         action?.Invoke(initiated);
+
+        if (initiated is ILanguageAwareRequest languageAwareRequest)
+            languageAwareRequest.Language = request.Language;
+
+        if (initiated is IExecutorAwareRequest executorAwareRequest)
+            executorAwareRequest.ExecutorUid = request.ExecutorUid;
+
         return initiated;
     }
 }
