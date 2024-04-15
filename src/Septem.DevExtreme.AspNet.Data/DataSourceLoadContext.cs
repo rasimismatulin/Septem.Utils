@@ -1,12 +1,12 @@
-﻿using DevExtreme.AspNet.Data.Aggregation;
-using DevExtreme.AspNet.Data.Helpers;
-using DevExtreme.AspNet.Data.Types;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Septem.DevExtreme.AspNet.Data.Aggregation;
+using Septem.DevExtreme.AspNet.Data.Helpers;
+using Septem.DevExtreme.AspNet.Data.Types;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     partial class DataSourceLoadContext {
         readonly DataSourceLoadOptionsBase _options;

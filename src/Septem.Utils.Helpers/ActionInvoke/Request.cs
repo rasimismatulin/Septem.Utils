@@ -24,7 +24,7 @@ public abstract class Request : ILanguageAwareRequest, IExecutorAwareRequest
 
     public Guid? InitiatorId { get; internal set; }
 
-    public DateTime InitiatedUtc { get; }
+    public System.DateTime InitiatedUtc { get; }
 
     public string Language { get; private set; }
 

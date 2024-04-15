@@ -1,11 +1,11 @@
-﻿using DevExtreme.AspNet.Data.Aggregation;
-using DevExtreme.AspNet.Data.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Septem.DevExtreme.AspNet.Data.Aggregation;
+using Septem.DevExtreme.AspNet.Data.Types;
 
-namespace DevExtreme.AspNet.Data.RemoteGrouping {
+namespace Septem.DevExtreme.AspNet.Data.RemoteGrouping {
 
     class RemoteGroupExpressionCompiler : ExpressionCompiler {
         bool _expandSumType;

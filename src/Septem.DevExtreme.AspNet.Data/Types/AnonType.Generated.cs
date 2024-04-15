@@ -1,7 +1,8 @@
 ﻿// WARNING! GENERATED CODE!
+
 using System;
 
-namespace DevExtreme.AspNet.Data.Types {
+namespace Septem.DevExtreme.AspNet.Data.Types {
 
     class AnonType<T0> : AnonType {
         public readonly T0 I0;

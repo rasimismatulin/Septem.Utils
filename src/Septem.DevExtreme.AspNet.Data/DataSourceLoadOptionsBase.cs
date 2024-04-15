@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.ComponentModel;
-using System.Linq.Expressions;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     /// <summary>
     /// A class with properties that specify data processing settings.

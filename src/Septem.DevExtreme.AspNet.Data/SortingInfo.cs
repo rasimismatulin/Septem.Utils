@@ -1,4 +1,4 @@
-﻿namespace DevExtreme.AspNet.Data {
+﻿namespace Septem.DevExtreme.AspNet.Data {
 
     /// <summary>
     /// Represents a sorting parameter.

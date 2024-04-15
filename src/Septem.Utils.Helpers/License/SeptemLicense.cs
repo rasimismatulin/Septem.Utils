@@ -18,18 +18,18 @@ public class SeptemLicense
     public SeptemLicenseType Type { get; set; }
 
     [XmlElement("CreateDateUtc")]
-    public DateTime CreateDateUtc { get; set; }
+    public System.DateTime CreateDateUtc { get; set; }
 
     [XmlElement("StartDateUtc")]
-    public DateTime StartDateUtc { get; set; }
+    public System.DateTime StartDateUtc { get; set; }
 
     [XmlElement("EndDateUtc")]
-    public DateTime? EndDateUtc { get; set; }
+    public System.DateTime? EndDateUtc { get; set; }
 
     public virtual ValidatedSeptemLicense Validate(string deviceUid, Guid clientUid)
     {
         var entity = new ValidatedSeptemLicense { LicenseEntity = this };
-        var currentDate = DateTime.UtcNow;
+        var currentDate = System.DateTime.UtcNow;
 
         if (EndDateUtc.HasValue && EndDateUtc < currentDate)
         {

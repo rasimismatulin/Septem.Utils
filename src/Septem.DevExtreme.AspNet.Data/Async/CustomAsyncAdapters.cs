@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DevExtreme.AspNet.Data.Async {
+namespace Septem.DevExtreme.AspNet.Data.Async {
     using RegisteredAdapters = List<Tuple<Func<Type, bool>, IAsyncAdapter>>;
 
     public static class CustomAsyncAdapters {

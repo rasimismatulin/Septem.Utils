@@ -1,6 +1,6 @@
-﻿using DevExtreme.AspNet.Data.Helpers;
+﻿using Septem.DevExtreme.AspNet.Data.Helpers;
 
-namespace DevExtreme.AspNet.Data.Aggregation {
+namespace Septem.DevExtreme.AspNet.Data.Aggregation {
 
     /// <summary>
     /// Represents a data aggregator.

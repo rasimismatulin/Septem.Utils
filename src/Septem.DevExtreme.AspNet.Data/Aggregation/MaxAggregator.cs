@@ -1,8 +1,8 @@
-﻿using DevExtreme.AspNet.Data.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Septem.DevExtreme.AspNet.Data.Helpers;
 
-namespace DevExtreme.AspNet.Data.Aggregation {
+namespace Septem.DevExtreme.AspNet.Data.Aggregation {
 
     class MaxAggregator<T> : Aggregator<T> {
         object _max = null;

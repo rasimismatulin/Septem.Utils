@@ -1,4 +1,4 @@
-﻿namespace DevExtreme.AspNet.Data.Types {
+﻿namespace Septem.DevExtreme.AspNet.Data.Types {
 
     class AnonTypeNewTweaks {
         public bool AllowEmpty = true;

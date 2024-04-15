@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Globalization;
-using System.ComponentModel;
 using Newtonsoft.Json.Linq;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     static class Utils {
 

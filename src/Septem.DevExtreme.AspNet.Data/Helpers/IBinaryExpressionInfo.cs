@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace DevExtreme.AspNet.Data.Helpers {
+namespace Septem.DevExtreme.AspNet.Data.Helpers {
 
     public interface IBinaryExpressionInfo {
         Expression DataItemExpression { get; }

@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Septem.IdentityServer.Api",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Septem.Utils.EmailSender", "src\Septem.Utils.EmailSender\Septem.Utils.EmailSender.csproj", "{2B3FAE9E-5973-4C6F-A9F2-398715818779}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Septem.Utils.TelegramBotSender", "src\Septem.Utils.TelegramBotSender\Septem.Utils.TelegramBotSender.csproj", "{DACFCD51-C340-4A7E-9F31-16075FE6445B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Septem.Utils.TelegramBotSender", "src\Septem.Utils.TelegramBotSender\Septem.Utils.TelegramBotSender.csproj", "{DACFCD51-C340-4A7E-9F31-16075FE6445B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

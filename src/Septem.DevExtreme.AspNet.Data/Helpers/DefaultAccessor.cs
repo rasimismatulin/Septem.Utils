@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace DevExtreme.AspNet.Data.Helpers {
+namespace Septem.DevExtreme.AspNet.Data.Helpers {
 
     class DefaultAccessor<T> : ExpressionCompiler, IAccessor<T> {
         IDictionary<string, Func<T, object>> _accessors;

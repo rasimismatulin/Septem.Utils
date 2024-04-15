@@ -1,7 +1,7 @@
-﻿using DevExtreme.AspNet.Data.ResponseModel;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Septem.DevExtreme.AspNet.Data.ResponseModel;
 
-namespace DevExtreme.AspNet.Data.RemoteGrouping {
+namespace Septem.DevExtreme.AspNet.Data.RemoteGrouping {
 
     class RemoteGroupingResult {
         public List<Group> Groups;

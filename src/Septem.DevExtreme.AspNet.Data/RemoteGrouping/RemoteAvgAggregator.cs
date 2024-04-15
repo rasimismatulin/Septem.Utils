@@ -1,9 +1,9 @@
-﻿using DevExtreme.AspNet.Data.Aggregation;
-using DevExtreme.AspNet.Data.Helpers;
-using DevExtreme.AspNet.Data.Types;
-using System;
+﻿using System;
+using Septem.DevExtreme.AspNet.Data.Aggregation;
+using Septem.DevExtreme.AspNet.Data.Helpers;
+using Septem.DevExtreme.AspNet.Data.Types;
 
-namespace DevExtreme.AspNet.Data.RemoteGrouping {
+namespace Septem.DevExtreme.AspNet.Data.RemoteGrouping {
 
     class RemoteAvgAggregator<T> : Aggregator<T> {
         Aggregator<T> _countAggregator;

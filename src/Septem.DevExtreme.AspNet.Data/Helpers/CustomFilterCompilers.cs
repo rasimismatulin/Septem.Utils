@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace DevExtreme.AspNet.Data.Helpers {
+namespace Septem.DevExtreme.AspNet.Data.Helpers {
     using BinaryExpressionCompilerFunc = Func<IBinaryExpressionInfo, Expression>;
 
     public static class CustomFilterCompilers {

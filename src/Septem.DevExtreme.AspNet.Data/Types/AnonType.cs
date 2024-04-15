@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DevExtreme.AspNet.Data.Types {
+namespace Septem.DevExtreme.AspNet.Data.Types {
 
     partial class AnonType {
         protected virtual int Size {

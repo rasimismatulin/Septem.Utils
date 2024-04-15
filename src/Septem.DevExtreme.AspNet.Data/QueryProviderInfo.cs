@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     class QueryProviderInfo {
         public readonly bool IsLinqToObjects;

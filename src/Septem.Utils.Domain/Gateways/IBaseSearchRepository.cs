@@ -8,7 +8,6 @@ namespace Septem.Utils.Domain.Gateways;
 public interface IBaseSearchRepository<in TSearch> : IBaseRepository
     where TSearch : CollectionQuery
 {
-
     Task<bool> ExistsAsync(TSearch search, CancellationToken cancellationToken);
 
     Task<ICollection<TDomain>> SearchAsync<TDomain>(TSearch search, CancellationToken cancellationToken)

@@ -1,12 +1,12 @@
-﻿using DevExtreme.AspNet.Data.Aggregation;
-using DevExtreme.AspNet.Data.ResponseModel;
-using DevExtreme.AspNet.Data.Types;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Septem.DevExtreme.AspNet.Data.Aggregation;
+using Septem.DevExtreme.AspNet.Data.ResponseModel;
+using Septem.DevExtreme.AspNet.Data.Types;
 
-namespace DevExtreme.AspNet.Data.RemoteGrouping {
+namespace Septem.DevExtreme.AspNet.Data.RemoteGrouping {
 
     class RemoteGroupTransformer {
 

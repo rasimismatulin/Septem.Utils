@@ -1,6 +1,6 @@
-﻿using DevExtreme.AspNet.Data.Helpers;
+﻿using Septem.DevExtreme.AspNet.Data.Helpers;
 
-namespace DevExtreme.AspNet.Data.Types {
+namespace Septem.DevExtreme.AspNet.Data.Types {
 
     class AnonTypeAccessor : IAccessor<AnonType> {
         public static readonly AnonTypeAccessor Instance = new AnonTypeAccessor();

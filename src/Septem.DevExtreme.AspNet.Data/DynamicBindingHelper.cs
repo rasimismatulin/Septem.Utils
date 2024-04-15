@@ -1,11 +1,11 @@
-﻿using Microsoft.CSharp.RuntimeBinder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq.Expressions;
+using Microsoft.CSharp.RuntimeBinder;
 using DynamicBinder = Microsoft.CSharp.RuntimeBinder.Binder;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     static class DynamicBindingHelper {
         readonly static IEnumerable<CSharpArgumentInfo> EMPTY_ARGUMENT_INFO = new[] {

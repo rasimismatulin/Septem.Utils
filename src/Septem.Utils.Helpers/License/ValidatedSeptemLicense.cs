@@ -12,7 +12,7 @@ public class ValidatedSeptemLicense
 
     public string ValidationCode { get; set; }
 
-    public DateTime? ValidationDateUtc { get; set; }
+    public System.DateTime? ValidationDateUtc { get; set; }
 
     public string ValidationMessage { get; set; }
 

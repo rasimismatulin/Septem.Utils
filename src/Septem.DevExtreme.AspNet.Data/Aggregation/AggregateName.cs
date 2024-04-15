@@ -1,4 +1,4 @@
-﻿namespace DevExtreme.AspNet.Data.Aggregation {
+﻿namespace Septem.DevExtreme.AspNet.Data.Aggregation {
 
     static class AggregateName {
         public const string

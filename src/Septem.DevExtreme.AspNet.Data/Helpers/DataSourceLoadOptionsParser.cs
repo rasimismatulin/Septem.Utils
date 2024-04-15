@@ -1,4 +1,4 @@
-﻿namespace DevExtreme.AspNet.Data.Helpers {
+﻿namespace Septem.DevExtreme.AspNet.Data.Helpers {
 
     /// <summary>
     /// A parser for the data processing settings.

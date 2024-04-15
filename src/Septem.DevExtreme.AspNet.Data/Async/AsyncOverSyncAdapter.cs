@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DevExtreme.AspNet.Data.Async {
+namespace Septem.DevExtreme.AspNet.Data.Async {
 
     class AsyncOverSyncAdapter : IAsyncAdapter {
         public static readonly IAsyncAdapter Instance = new AsyncOverSyncAdapter();

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DevExtreme.AspNet.Data.Async {
+namespace Septem.DevExtreme.AspNet.Data.Async {
 
     class ReflectionAsyncAdapter : IAsyncAdapter {
         readonly QueryProviderInfo _providerInfo;

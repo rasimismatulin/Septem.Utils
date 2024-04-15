@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace DevExtreme.AspNet.Data.Helpers {
+namespace Septem.DevExtreme.AspNet.Data.Helpers {
 
     public static class CustomAccessorCompilers {
         public delegate Expression CompilerFunc(Expression expr, string accessorText);

@@ -1,8 +1,8 @@
-﻿using DevExtreme.AspNet.Data.Aggregation.Accumulators;
-using DevExtreme.AspNet.Data.Helpers;
-using System;
+﻿using System;
+using Septem.DevExtreme.AspNet.Data.Aggregation.Accumulators;
+using Septem.DevExtreme.AspNet.Data.Helpers;
 
-namespace DevExtreme.AspNet.Data.Aggregation {
+namespace Septem.DevExtreme.AspNet.Data.Aggregation {
 
     class SumAggregator<T> : Aggregator<T> {
         IAccumulator _accumulator;

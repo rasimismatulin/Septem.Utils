@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace DevExtreme.AspNet.Data.Types {
+namespace Septem.DevExtreme.AspNet.Data.Types {
 
     static class DynamicClassBridge {
         static readonly Type

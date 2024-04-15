@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace DevExtreme.AspNet.Data.Types {
+namespace Septem.DevExtreme.AspNet.Data.Types {
 
     class AnonTypeFacade {
         readonly IReadOnlyCollection<Expression> MemberExpressions;

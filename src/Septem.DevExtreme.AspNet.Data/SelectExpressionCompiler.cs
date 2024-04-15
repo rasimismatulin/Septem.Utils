@@ -1,10 +1,10 @@
-﻿using DevExtreme.AspNet.Data.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Septem.DevExtreme.AspNet.Data.Types;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     class SelectExpressionCompiler : ExpressionCompiler {
         AnonTypeNewTweaks _anonTypeNewTweaks;

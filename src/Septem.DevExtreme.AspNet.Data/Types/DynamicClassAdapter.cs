@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DevExtreme.AspNet.Data.Types {
+namespace Septem.DevExtreme.AspNet.Data.Types {
 
     class DynamicClassAdapter : AnonType {
         readonly object Obj;

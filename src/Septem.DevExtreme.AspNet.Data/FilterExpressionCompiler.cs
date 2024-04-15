@@ -1,15 +1,18 @@
-﻿using DevExtreme.AspNet.Data.Helpers;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
+using Septem.DevExtreme.AspNet.Data.Helpers;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data
+{
 
-    class FilterExpressionCompiler : ExpressionCompiler {
+    class FilterExpressionCompiler : ExpressionCompiler
+    {
         const string
             CONTAINS = "contains",
             NOT_CONTAINS = "notcontains",
@@ -21,28 +24,33 @@ namespace DevExtreme.AspNet.Data {
         readonly bool _supportsEqualsMethod;
 
         public FilterExpressionCompiler(Type itemType, bool guardNulls, bool stringToLower = false, bool supportsEqualsMethod = true)
-            : base(itemType, guardNulls) {
+            : base(itemType, guardNulls)
+        {
             _stringToLower = stringToLower;
             _supportsEqualsMethod = supportsEqualsMethod;
         }
 
-        public LambdaExpression Compile(IList criteriaJson) {
+        public LambdaExpression Compile(IList criteriaJson)
+        {
             var dataItemExpr = CreateItemParam();
             return Expression.Lambda(CompileCore(dataItemExpr, criteriaJson), dataItemExpr);
         }
 
-        Expression CompileCore(ParameterExpression dataItemExpr, IList criteriaJson) {
-            if(IsCriteria(criteriaJson[0]))
+        Expression CompileCore(ParameterExpression dataItemExpr, IList criteriaJson)
+        {
+            if (IsCriteria(criteriaJson[0]))
                 return CompileGroup(dataItemExpr, criteriaJson);
 
-            if(IsUnary(criteriaJson)) {
+            if (IsUnary(criteriaJson))
+            {
                 return CompileUnary(dataItemExpr, criteriaJson);
             }
 
             return CompileBinary(dataItemExpr, criteriaJson);
         }
 
-        Expression CompileBinary(ParameterExpression dataItemExpr, IList criteriaJson) {
+        Expression CompileBinary(ParameterExpression dataItemExpr, IList criteriaJson)
+        {
             var hasExplicitOperation = criteriaJson.Count > 2;
 
             var clientAccessor = Convert.ToString(criteriaJson[0]);
@@ -50,8 +58,10 @@ namespace DevExtreme.AspNet.Data {
             var clientValue = Utils.UnwrapNewtonsoftValue(criteriaJson[hasExplicitOperation ? 2 : 1]);
             var isStringOperation = clientOperation == CONTAINS || clientOperation == NOT_CONTAINS || clientOperation == STARTS_WITH || clientOperation == ENDS_WITH;
 
-            if(CustomFilterCompilers.Binary.CompilerFuncs.Count > 0) {
-                var customResult = CustomFilterCompilers.Binary.TryCompile(new BinaryExpressionInfo {
+            if (CustomFilterCompilers.Binary.CompilerFuncs.Count > 0)
+            {
+                var customResult = CustomFilterCompilers.Binary.TryCompile(new BinaryExpressionInfo
+                {
                     DataItemExpression = dataItemExpr,
                     AccessorText = clientAccessor,
                     Operation = clientOperation,
@@ -59,35 +69,44 @@ namespace DevExtreme.AspNet.Data {
                     StringToLower = _stringToLower
                 });
 
-                if(customResult != null)
+                if (customResult != null)
                     return customResult;
             }
 
             var accessorExpr = CompileAccessorExpression(dataItemExpr, clientAccessor, progression => {
-                if(isStringOperation)
+                if (isStringOperation)
                     ForceToString(progression);
 
-                if(_stringToLower)
+                if (_stringToLower)
                     AddToLower(progression);
             });
 
-            if(isStringOperation) {
+            if (isStringOperation)
+            {
                 return CompileStringFunction(accessorExpr, clientOperation, Convert.ToString(clientValue));
 
-            } else {
+            }
+            else
+            {
                 var useDynamicBinding = accessorExpr.Type == typeof(Object);
                 var expressionType = TranslateBinaryOperation(clientOperation);
 
-                if(!useDynamicBinding) {
-                    try {
+                if (!useDynamicBinding)
+                {
+                    try
+                    {
                         clientValue = Utils.ConvertClientValue(clientValue, accessorExpr.Type);
-                    } catch {
+                    }
+                    catch
+                    {
                         return Expression.Constant(false);
                     }
                 }
 
-                if(clientValue == null && !Utils.CanAssignNull(accessorExpr.Type)) {
-                    switch(expressionType) {
+                if (clientValue == null && !Utils.CanAssignNull(accessorExpr.Type))
+                {
+                    switch (expressionType)
+                    {
                         case ExpressionType.GreaterThan:
                         case ExpressionType.GreaterThanOrEqual:
                         case ExpressionType.LessThan:
@@ -101,12 +120,13 @@ namespace DevExtreme.AspNet.Data {
                     }
                 }
 
-                if(_stringToLower && clientValue is String)
+                if (_stringToLower && clientValue is String)
                     clientValue = ((string)clientValue).ToLower();
 
                 Expression valueExpr = Expression.Constant(clientValue, accessorExpr.Type);
 
-                if(useDynamicBinding) {
+                if (useDynamicBinding)
+                {
                     var compareMethod = typeof(Utils).GetMethod(nameof(Utils.DynamicCompare));
                     return Expression.MakeBinary(
                         expressionType,
@@ -115,31 +135,38 @@ namespace DevExtreme.AspNet.Data {
                     );
                 }
 
-                if(expressionType == ExpressionType.Equal || expressionType == ExpressionType.NotEqual) {
+                if (expressionType == ExpressionType.Equal || expressionType == ExpressionType.NotEqual)
+                {
                     var type = Utils.StripNullableType(accessorExpr.Type);
-                    if(_supportsEqualsMethod && !HasEqualityOperator(type)) {
-                        if(type.IsValueType) {
+                    if (_supportsEqualsMethod && !HasEqualityOperator(type))
+                    {
+                        if (type.IsValueType)
+                        {
                             accessorExpr = Expression.Convert(accessorExpr, typeof(Object));
                             valueExpr = Expression.Convert(valueExpr, typeof(Object));
                         }
                         Expression result = Expression.Call(typeof(Object), "Equals", Type.EmptyTypes, accessorExpr, valueExpr);
-                        if(expressionType == ExpressionType.NotEqual)
+                        if (expressionType == ExpressionType.NotEqual)
                             result = Expression.Not(result);
                         return result;
                     }
                 }
 
-                if(IsInequality(expressionType)) {
+                if (IsInequality(expressionType))
+                {
                     var type = Utils.StripNullableType(accessorExpr.Type);
-                    if(!HasComparisonOperator(type)) {
-                        if(type.IsValueType) {
+                    if (!HasComparisonOperator(type))
+                    {
+                        if (type.IsValueType)
+                        {
                             var compareToMethod = type.GetMethod("CompareTo", new[] { type }) ?? type.GetMethod("CompareTo", new[] { typeof(object) });
-                            if(compareToMethod != null && !compareToMethod.IsStatic && compareToMethod.ReturnType == typeof(int))
+                            if (compareToMethod != null && !compareToMethod.IsStatic && compareToMethod.ReturnType == typeof(int))
                                 return CompileCompareToCall(accessorExpr, expressionType, clientValue, compareToMethod);
                         }
 
                         var compareMethod = type.GetMethod("Compare", new[] { type, type });
-                        if(compareMethod != null && compareMethod.IsStatic && compareMethod.ReturnType == typeof(int)) {
+                        if (compareMethod != null && compareMethod.IsStatic && compareMethod.ReturnType == typeof(int))
+                        {
                             return Expression.MakeBinary(
                                 expressionType,
                                 Expression.Call(compareMethod, accessorExpr, valueExpr),
@@ -156,37 +183,41 @@ namespace DevExtreme.AspNet.Data {
 
         }
 
-        bool IsInequality(ExpressionType type) {
+        bool IsInequality(ExpressionType type)
+        {
             return type == ExpressionType.LessThan || type == ExpressionType.LessThanOrEqual || type == ExpressionType.GreaterThanOrEqual || type == ExpressionType.GreaterThan;
         }
 
-        bool HasEqualityOperator(Type type) {
-            if(type.IsEnum || (int)Type.GetTypeCode(type) > 2)
+        bool HasEqualityOperator(Type type)
+        {
+            if (type.IsEnum || (int)Type.GetTypeCode(type) > 2)
                 return true;
 
-            if(type == typeof(Guid) || type == typeof(DateTimeOffset) || type == typeof(TimeSpan))
+            if (type == typeof(Guid) || type == typeof(DateTimeOffset) || type == typeof(TimeSpan))
                 return true;
 
             var operatorMethod = type.GetMethod("op_Equality", new[] { type, type });
             return operatorMethod != null && operatorMethod.ReturnType == typeof(bool);
         }
 
-        bool HasComparisonOperator(Type type) {
-            if(type.IsEnum)
+        bool HasComparisonOperator(Type type)
+        {
+            if (type.IsEnum)
                 return false;
 
             var code = (int)Type.GetTypeCode(type);
-            if(code > 4 && code < 18)
+            if (code > 4 && code < 18)
                 return true;
 
-            if(type == typeof(DateTimeOffset) || type == typeof(TimeSpan))
+            if (type == typeof(DateTimeOffset) || type == typeof(TimeSpan))
                 return true;
 
             return type.GetMethod("op_GreaterThan", new[] { type, type }) != null;
         }
 
-        Expression CompileCompareToCall(Expression accessorExpr, ExpressionType expressionType, object clientValue, MethodInfo compareToMethod) {
-            if(clientValue == null)
+        Expression CompileCompareToCall(Expression accessorExpr, ExpressionType expressionType, object clientValue, MethodInfo compareToMethod)
+        {
+            if (clientValue == null)
                 return Expression.Constant(false);
 
             var result = Expression.MakeBinary(
@@ -199,7 +230,8 @@ namespace DevExtreme.AspNet.Data {
                 Expression.Constant(0)
             );
 
-            if(GuardNulls) {
+            if (GuardNulls)
+            {
                 return Expression.Condition(
                     Expression.MakeBinary(ExpressionType.Equal, accessorExpr, Expression.Constant(null)),
                     Expression.Constant(false),
@@ -210,46 +242,70 @@ namespace DevExtreme.AspNet.Data {
             return result;
         }
 
-        Expression CompileStringFunction(Expression accessorExpr, string clientOperation, string value) {
-            if(_stringToLower && value != null)
+        Expression CompileStringFunction(Expression accessorExpr, string clientOperation, string value)
+        {
+            if (_stringToLower && value != null)
                 value = value.ToLower();
 
             var invert = false;
 
-            if(clientOperation == NOT_CONTAINS) {
+            if (clientOperation == NOT_CONTAINS)
+            {
                 clientOperation = CONTAINS;
                 invert = true;
             }
 
-            if(GuardNulls)
+            if (GuardNulls)
                 accessorExpr = Expression.Coalesce(accessorExpr, Expression.Constant(""));
 
-            var operationMethod = typeof(String).GetMethod(GetStringOperationMethodName(clientOperation), new[] { typeof(String) });
+            //var operationMethod = typeof(String).GetMethod(GetStringOperationMethodName(clientOperation), new[] { typeof(String) });
 
-            Expression result = Expression.Call(accessorExpr, operationMethod, Expression.Constant(value));
+            Expression valueConstant = clientOperation switch
+            {
+                STARTS_WITH => Expression.Constant($"{value}%"),
+                ENDS_WITH => Expression.Constant($"%{value}"),
+                CONTAINS => Expression.Constant($"%{value}%"),
+                NOT_CONTAINS => Expression.Constant($"%{value}%"),
+                _ => throw new ArgumentOutOfRangeException(nameof(clientOperation), clientOperation, null)
+            };
 
-            if(invert)
+            Expression result = Expression.Call(
+                typeof(NpgsqlDbFunctionsExtensions),
+                nameof(NpgsqlDbFunctionsExtensions.ILike),
+                Type.EmptyTypes,
+                Expression.Property(null, typeof(EF), nameof(EF.Functions)),
+                accessorExpr,
+                valueConstant
+            );
+            //Expression result = Expression.Call(accessorExpr, operationMethod, Expression.Constant(value));
+
+            if (invert)
                 result = Expression.Not(result);
 
             return result;
         }
 
-        Expression CompileGroup(ParameterExpression dataItemExpr, IList criteriaJson) {
+        Expression CompileGroup(ParameterExpression dataItemExpr, IList criteriaJson)
+        {
             var operands = new List<Expression>();
             var isAnd = true;
             var nextIsAnd = true;
 
-            foreach(var item in criteriaJson) {
+            foreach (var item in criteriaJson)
+            {
                 var operandJson = item as IList;
 
-                if(IsCriteria(operandJson)) {
-                    if(operands.Count > 1 && isAnd != nextIsAnd)
+                if (IsCriteria(operandJson))
+                {
+                    if (operands.Count > 1 && isAnd != nextIsAnd)
                         throw new ArgumentException("Mixing of and/or is not allowed inside a single group");
 
                     isAnd = nextIsAnd;
                     operands.Add(CompileCore(dataItemExpr, operandJson));
                     nextIsAnd = true;
-                } else {
+                }
+                else
+                {
                     nextIsAnd = Regex.IsMatch(Convert.ToString(item), "and|&", RegexOptions.IgnoreCase);
                 }
             }
@@ -257,8 +313,9 @@ namespace DevExtreme.AspNet.Data {
             Expression result = null;
             var op = isAnd ? ExpressionType.AndAlso : ExpressionType.OrElse;
 
-            foreach(var operand in operands) {
-                if(result == null)
+            foreach (var operand in operands)
+            {
+                if (result == null)
                     result = operand;
                 else
                     result = Expression.MakeBinary(op, result, operand);
@@ -267,12 +324,15 @@ namespace DevExtreme.AspNet.Data {
             return result;
         }
 
-        Expression CompileUnary(ParameterExpression dataItemExpr, IList criteriaJson) {
+        Expression CompileUnary(ParameterExpression dataItemExpr, IList criteriaJson)
+        {
             return Expression.Not(CompileCore(dataItemExpr, (IList)criteriaJson[1]));
         }
 
-        ExpressionType TranslateBinaryOperation(string clientOperation) {
-            switch(clientOperation) {
+        ExpressionType TranslateBinaryOperation(string clientOperation)
+        {
+            switch (clientOperation)
+            {
                 case "=":
                     return ExpressionType.Equal;
 
@@ -295,40 +355,45 @@ namespace DevExtreme.AspNet.Data {
             throw new NotSupportedException();
         }
 
-        bool IsCriteria(object item) {
+        bool IsCriteria(object item)
+        {
             return item is IList && !(item is String);
         }
 
-        internal bool IsUnary(IList criteriaJson) {
+        internal bool IsUnary(IList criteriaJson)
+        {
             return Convert.ToString(criteriaJson[0]) == "!";
         }
 
-        string GetStringOperationMethodName(string clientOperation) {
-            if(clientOperation == STARTS_WITH)
+        string GetStringOperationMethodName(string clientOperation)
+        {
+            if (clientOperation == STARTS_WITH)
                 return nameof(String.StartsWith);
 
-            if(clientOperation == ENDS_WITH)
+            if (clientOperation == ENDS_WITH)
                 return nameof(String.EndsWith);
 
             return nameof(String.Contains);
         }
 
-        static void AddToLower(List<Expression> progression) {
+        static void AddToLower(List<Expression> progression)
+        {
             var last = progression.Last();
 
-            if(last.Type != typeof(String))
+            if (last.Type != typeof(String))
                 return;
 
             var toLowerMethod = typeof(String).GetMethod(nameof(String.ToLower), Type.EmptyTypes);
             var toLowerCall = Expression.Call(last, toLowerMethod);
 
-            if(last is MethodCallExpression lastCall && lastCall.Method.Name == nameof(ToString))
+            if (last is MethodCallExpression lastCall && lastCall.Method.Name == nameof(ToString))
                 progression.RemoveAt(progression.Count - 1);
 
             progression.Add(toLowerCall);
         }
 
-        class BinaryExpressionInfo : IBinaryExpressionInfo {
+        class BinaryExpressionInfo : IBinaryExpressionInfo
+        {
             public Expression DataItemExpression { get; set; }
             public string AccessorText { get; set; }
             public string Operation { get; set; }

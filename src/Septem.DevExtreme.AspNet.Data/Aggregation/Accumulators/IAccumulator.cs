@@ -1,4 +1,4 @@
-﻿namespace DevExtreme.AspNet.Data.Aggregation.Accumulators {
+﻿namespace Septem.DevExtreme.AspNet.Data.Aggregation.Accumulators {
 
     interface IAccumulator {
         void Add(object value);

@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace DevExtreme.AspNet.Data.ResponseModel {
+namespace Septem.DevExtreme.AspNet.Data.ResponseModel {
 
     /// <summary>
     /// Represents a group in the resulting dataset.

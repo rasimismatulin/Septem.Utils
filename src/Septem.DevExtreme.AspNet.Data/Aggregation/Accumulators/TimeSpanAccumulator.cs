@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace DevExtreme.AspNet.Data.Aggregation.Accumulators {
+namespace Septem.DevExtreme.AspNet.Data.Aggregation.Accumulators {
 
     class TimeSpanAccumulator : IAccumulator {
         TimeSpan _value;

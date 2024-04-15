@@ -65,7 +65,7 @@ public class SearchPropertyOption<T> : SearchPropertyOption
             var b = (byte)(Value as object);
             return b.ToString();
         }
-        if (Value is DateTime DateTime)
+        if (Value is System.DateTime DateTime)
         {
             return DateTime.ToString("yyyy-MM-dd");
         }

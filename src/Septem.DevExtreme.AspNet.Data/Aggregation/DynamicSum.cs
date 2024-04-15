@@ -1,9 +1,9 @@
-﻿using DevExtreme.AspNet.Data.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Septem.DevExtreme.AspNet.Data.Helpers;
 
-namespace DevExtreme.AspNet.Data.Aggregation {
+namespace Septem.DevExtreme.AspNet.Data.Aggregation {
 
     static class DynamicSum {
 

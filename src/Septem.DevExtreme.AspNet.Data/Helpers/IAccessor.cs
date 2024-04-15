@@ -1,4 +1,4 @@
-﻿namespace DevExtreme.AspNet.Data.Helpers {
+﻿namespace Septem.DevExtreme.AspNet.Data.Helpers {
 
     /// <summary>
     /// Allows reading object properties.

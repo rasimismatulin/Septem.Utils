@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DevExtreme.AspNet.Data.Aggregation.Accumulators {
+namespace Septem.DevExtreme.AspNet.Data.Aggregation.Accumulators {
 
     static class AccumulatorFactory {
 

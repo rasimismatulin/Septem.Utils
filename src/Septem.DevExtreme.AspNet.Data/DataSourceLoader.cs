@@ -1,10 +1,10 @@
-﻿using DevExtreme.AspNet.Data.ResponseModel;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Septem.DevExtreme.AspNet.Data.ResponseModel;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     /// <summary>
     /// Provides static methods for loading data from collections that implement the

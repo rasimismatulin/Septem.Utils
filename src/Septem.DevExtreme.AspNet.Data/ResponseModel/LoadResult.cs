@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 
-namespace DevExtreme.AspNet.Data.ResponseModel {
+namespace Septem.DevExtreme.AspNet.Data.ResponseModel {
 
     /// <summary>
     /// Represents a load result.

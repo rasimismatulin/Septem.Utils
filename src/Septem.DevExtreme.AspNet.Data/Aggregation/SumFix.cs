@@ -1,8 +1,8 @@
-﻿using DevExtreme.AspNet.Data.Aggregation.Accumulators;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Septem.DevExtreme.AspNet.Data.Aggregation.Accumulators;
 
-namespace DevExtreme.AspNet.Data.Aggregation {
+namespace Septem.DevExtreme.AspNet.Data.Aggregation {
 
     // Rationale: normalization across LINQ providers
     // https://github.com/aspnet/EntityFrameworkCore/issues/12307

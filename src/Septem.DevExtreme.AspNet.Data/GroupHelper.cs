@@ -1,10 +1,10 @@
-﻿using DevExtreme.AspNet.Data.Helpers;
-using DevExtreme.AspNet.Data.ResponseModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Septem.DevExtreme.AspNet.Data.Helpers;
+using Septem.DevExtreme.AspNet.Data.ResponseModel;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     class GroupHelper<T> {
         readonly static object NULL_KEY = new object();

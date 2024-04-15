@@ -1,12 +1,12 @@
-﻿using DevExtreme.AspNet.Data.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Septem.DevExtreme.AspNet.Data.Helpers;
 
-namespace DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data {
 
     abstract class ExpressionCompiler {
         protected readonly Type ItemType;

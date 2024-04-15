@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DevExtreme.AspNet.Data.Helpers {
+namespace Septem.DevExtreme.AspNet.Data.Helpers {
 
     static class EFSorting {
 
