@@ -10,7 +10,7 @@ public abstract class Request : ILanguageAwareRequest, IExecutorAwareRequest
     protected Request()
     {
         Id = Guid.NewGuid();
-        InitiatedUtc = DateTime.UtcNow;
+        InitiatedUtc = System.DateTime.UtcNow;
     }
 
     internal Request(Guid initiatorId) : this()

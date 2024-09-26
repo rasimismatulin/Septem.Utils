@@ -10,9 +10,19 @@ public static class MappingExpressionExtensions
         where TSource : BaseDomain
         where TDestination : BasePersistenceEntity
     {
-        return option
-            .ForMember(dest => dest.CreatedUtc, opt => opt.Ignore())
-            .ForMember(dest => dest.ModifiedUtc, opt => opt.Ignore())
-            .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
+        return option.AfterMap((src, dest, ctx) =>
+        {
+            new BaseEntityAfterMapAction<TSource, TDestination>().Process(src, dest, ctx);
+        });
+    }
+
+    public static IMappingExpression<TSource, TDestination> BaseUidEntityAfterMap<TSource, TDestination>(this IMappingExpression<TSource, TDestination> option)
+        where TSource : BaseDomain
+        where TDestination : BaseEntity
+    {
+        return option.AfterMap((src, dest, ctx) =>
+        {
+            new BaseUidEntityAfterMapAction<TSource, TDestination>().Process(src, dest, ctx);
+        });
     }
 }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 
@@ -21,10 +21,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="FluentValidation" Version="11.0.2" />
-	  <PackageReference Include="Septem.Utils.Helpers" Version="3.4.0" />
+	  <PackageReference Include="FluentValidation" Version="11.10.0" />
 	</ItemGroup>
-	
+
+	<ItemGroup>
+		<ProjectReference Include="..\Septem.Utils.Helpers\Septem.Utils.Helpers.csproj" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<Compile Update="ValidationMessages.Designer.cs">
 			<DesignTime>True</DesignTime>

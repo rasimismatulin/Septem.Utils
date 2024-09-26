@@ -8,7 +8,7 @@ namespace Septem.Utils.Helpers.CodeGeneration
 
         public RandomCodeGenerator()
         {
-            _rnd = new Random(DateTime.Now.Ticks.GetHashCode());
+            _rnd = new Random(System.DateTime.Now.Ticks.GetHashCode());
         }
 
         public string Generate(int length)

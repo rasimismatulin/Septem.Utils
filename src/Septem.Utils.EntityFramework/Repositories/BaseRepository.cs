@@ -146,11 +146,15 @@ public class BaseRepository<TEntity, TContext>
 
             foreach (var dbEntryCollection in dbEntry.Collections)
             {
-                var accessor = dbEntryCollection.Metadata.GetCollectionAccessor();
+                //var accessor = dbEntryCollection.Metadata.GetCollectionAccessor();
                 await dbEntryCollection.LoadAsync(cancellationToken);
-                foreach (var child in dbEntryCollection.CurrentValue)
+
+                if (dbEntryCollection.CurrentValue != null)
                 {
-                    DbContext.Remove(child);
+                    foreach (var child in dbEntryCollection.CurrentValue)
+                    {
+                        DbContext.Remove(child);
+                    }
                 }
                 //accessor.Remove(entity, child);
             }

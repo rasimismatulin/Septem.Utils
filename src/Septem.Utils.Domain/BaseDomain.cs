@@ -8,7 +8,7 @@ public abstract class BaseDomain
 {
     private readonly List<DomainEventBase> _domainEvents = new();
 
-    public Guid Id { get; set; }
+    public Guid Uid { get; set; }
 
     [NotMapped]
     public IEnumerable<DomainEventBase> DomainEvents => _domainEvents.AsReadOnly();

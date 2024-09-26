@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
 
@@ -21,9 +21,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Quartz" Version="3.4.0" />
-		<PackageReference Include="Septem.Notifications.Abstractions" Version="3.1.0" />
-		<PackageReference Include="Septem.Notifications.Core" Version="3.1.0" />
+		<PackageReference Include="Quartz" Version="3.13.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Septem.Notifications.Abstractions\Septem.Notifications.Abstractions.csproj" />
+	  <ProjectReference Include="..\Septem.Notifications.Core\Septem.Notifications.Core.csproj" />
 	</ItemGroup>
 
 </Project>

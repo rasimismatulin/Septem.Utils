@@ -244,7 +244,7 @@ namespace Septem.DevExtreme.AspNet.Data
 
         Expression CompileStringFunction(Expression accessorExpr, string clientOperation, string value)
         {
-            if (_stringToLower && value != null)
+            if (value != null)
                 value = value.ToLower();
 
             var invert = false;
