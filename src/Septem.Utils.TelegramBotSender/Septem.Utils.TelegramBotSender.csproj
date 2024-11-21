@@ -16,7 +16,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageReleaseNotes>Version 4</PackageReleaseNotes>
 		<NeutralLanguage>en</NeutralLanguage>
-		<Version>4.0.2</Version>
+		<Version>4.0.3</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
