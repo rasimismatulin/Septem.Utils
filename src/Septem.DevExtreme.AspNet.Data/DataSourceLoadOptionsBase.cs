@@ -8,7 +8,11 @@ namespace Septem.DevExtreme.AspNet.Data {
     /// <summary>
     /// A class with properties that specify data processing settings.
     /// </summary>
-    public class DataSourceLoadOptionsBase {
+    public class DataSourceLoadOptionsBase
+    {
+
+        public bool UseNpgILikeFunction { get; set; } = true;
+
         /// <summary>
         /// A global default value for the <see cref="StringToLower" /> property
         /// </summary>

@@ -19,7 +19,9 @@ namespace Septem.DevExtreme.AspNet.Data {
         /// <param name="source">A collection that implements the <see cref="System.Collections.Generic.IEnumerable{T}"/> interface.</param>
         /// <param name="options">Data processing settings when loading data.</param>
         /// <returns>The load result.</returns>
-        public static LoadResult Load<T>(IEnumerable<T> source, DataSourceLoadOptionsBase options) {
+        public static LoadResult Load<T>(IEnumerable<T> source, DataSourceLoadOptionsBase options)
+        {
+            options.UseNpgILikeFunction = false;
             return Load(source.AsQueryable(), options);
         }
 

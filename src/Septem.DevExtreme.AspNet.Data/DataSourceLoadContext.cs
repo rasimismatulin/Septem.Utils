@@ -77,6 +77,8 @@ namespace Septem.DevExtreme.AspNet.Data {
         public bool HasFilter => !IsEmptyList(_options.Filter);
         public bool UseStringToLower => _options.StringToLower ?? DataSourceLoadOptionsBase.StringToLowerDefault ?? _providerInfo.IsLinqToObjects;
         public bool SupportsEqualsMethod => !_providerInfo.IsXPO;
+        public bool UseNpgILikeFunction => _options.UseNpgILikeFunction;
+        
     }
 
     // Grouping

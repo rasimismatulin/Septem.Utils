@@ -22,12 +22,14 @@ namespace Septem.DevExtreme.AspNet.Data
         bool _stringToLower;
 
         readonly bool _supportsEqualsMethod;
+        private readonly bool _useNpgILikeFunction;
 
-        public FilterExpressionCompiler(Type itemType, bool guardNulls, bool stringToLower = false, bool supportsEqualsMethod = true)
+        public FilterExpressionCompiler(Type itemType, bool guardNulls, bool stringToLower = false, bool supportsEqualsMethod = true, bool useNpgILikeFunction = true)
             : base(itemType, guardNulls)
         {
             _stringToLower = stringToLower;
             _supportsEqualsMethod = supportsEqualsMethod;
+            _useNpgILikeFunction = useNpgILikeFunction;
         }
 
         public LambdaExpression Compile(IList criteriaJson)
@@ -258,7 +260,7 @@ namespace Septem.DevExtreme.AspNet.Data
             if (GuardNulls)
                 accessorExpr = Expression.Coalesce(accessorExpr, Expression.Constant(""));
 
-            //var operationMethod = typeof(String).GetMethod(GetStringOperationMethodName(clientOperation), new[] { typeof(String) });
+            var operationMethod = typeof(String).GetMethod(GetStringOperationMethodName(clientOperation), new[] { typeof(String) });
 
             Expression valueConstant = clientOperation switch
             {
@@ -269,15 +271,22 @@ namespace Septem.DevExtreme.AspNet.Data
                 _ => throw new ArgumentOutOfRangeException(nameof(clientOperation), clientOperation, null)
             };
 
-            Expression result = Expression.Call(
-                typeof(NpgsqlDbFunctionsExtensions),
-                nameof(NpgsqlDbFunctionsExtensions.ILike),
-                Type.EmptyTypes,
-                Expression.Property(null, typeof(EF), nameof(EF.Functions)),
-                accessorExpr,
-                valueConstant
-            );
-            //Expression result = Expression.Call(accessorExpr, operationMethod, Expression.Constant(value));
+            Expression result;
+            if (_useNpgILikeFunction)
+            {
+                result = Expression.Call(
+                    typeof(NpgsqlDbFunctionsExtensions),
+                    nameof(NpgsqlDbFunctionsExtensions.ILike),
+                    Type.EmptyTypes,
+                    Expression.Property(null, typeof(EF), nameof(EF.Functions)),
+                    accessorExpr,
+                    valueConstant
+                );
+            }
+            else
+            {
+                result = Expression.Call(accessorExpr, operationMethod, Expression.Constant(value));
+            }
 
             if (invert)
                 result = Expression.Not(result);
