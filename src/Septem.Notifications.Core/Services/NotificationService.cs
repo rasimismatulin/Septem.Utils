@@ -13,19 +13,19 @@ namespace Septem.Notifications.Core.Services;
 
 internal class NotificationService : INotificationService
 {
-    private readonly INotificationRepository _notificationRepository;
+    private readonly NotificationDbContext _notificationDbContext;
     private readonly ILogger _logger;
 
-    public NotificationService(ILoggerFactory loggerFactory, INotificationRepository notificationRepository)
+    public NotificationService(ILoggerFactory loggerFactory, NotificationDbContext notificationDbContext)
     {
+        _notificationDbContext = notificationDbContext;
         _logger = loggerFactory.CreateLogger<NotificationService>();
-        _notificationRepository = notificationRepository;
     }
 
 
     public async Task CreateNotificationAsync(Notification notification, Receiver receiver, CancellationToken cancellationToken)
     {
-        await CreateNotificationAsync(notification, new[] { receiver }, cancellationToken);
+        await CreateNotificationAsync(notification, [receiver], cancellationToken);
     }
 
     public async Task CreateNotificationAsync(Notification notification, ICollection<Receiver> receivers, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ internal class NotificationService : INotificationService
 
         var notificationModel = Converter.GetNotificationEntity(notification);
 
-        var scheduled = notificationModel.TimeToSendUtc > DateTime.UtcNow;
+        var scheduled = notificationModel.TimeToSendUtc > DateTimeOffset.UtcNow;
         var hasParameters = receivers.Any(x => x.Parameters.Any());
         var hasTargets = receivers.Any(x => x.TargetUid.HasValue);
 
@@ -70,15 +70,15 @@ internal class NotificationService : INotificationService
             _logger.LogInformation($"Receiver created. Uid:{groupKey}; Title: {receiverEntity.ReceiverType};");
         }
 
-        await _notificationRepository.AddNotificationAsync(notificationModel, cancellationToken);
-        await _notificationRepository.SaveChangesAsync(cancellationToken);
+        _notificationDbContext.Notifications.Add(notificationModel);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation($"Notification saved. Uid:{groupKey};");
     }
 
     public async Task CancelAsync(Guid groupKey, CancellationToken cancellationToken = default)
     {
-        var notifications = await _notificationRepository.CollectionQuery
+        var notifications = await _notificationDbContext.Notifications
             .Where(x => x.Status == NotificationStatus.Pending && x.GroupKey == groupKey)
             .ToArrayAsync(cancellationToken);
 
@@ -88,12 +88,12 @@ internal class NotificationService : INotificationService
             _logger.LogInformation($"Notification canceled. Group key:{groupKey}; Notification:{notification.Uid};");
         }
 
-        await _notificationRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task CancelAsync(string cancellationKey, CancellationToken cancellationToken = default)
     {
-        var notifications = await _notificationRepository.CollectionQuery
+        var notifications = await _notificationDbContext.Notifications
             .Where(x => x.Status == NotificationStatus.Pending && x.CancellationKey == cancellationKey)
             .ToArrayAsync(cancellationToken);
 
@@ -103,12 +103,12 @@ internal class NotificationService : INotificationService
             _logger.LogInformation($"Notification canceled. Cancellation key:{cancellationKey}; Notification:{notification.Uid};");
         }
 
-        await _notificationRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task CancelByUidAsync(Guid uid, CancellationToken cancellationToken = default)
     {
-        var notifications = await _notificationRepository.CollectionQuery
+        var notifications = await _notificationDbContext.Notifications
             .Where(x => x.Status == NotificationStatus.Pending && x.Uid == uid)
             .ToArrayAsync(cancellationToken);
 
@@ -118,7 +118,7 @@ internal class NotificationService : INotificationService
             _logger.LogInformation($"Notification canceled. Notification:{notification.Uid};");
         }
 
-        await _notificationRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
 
     }
 }

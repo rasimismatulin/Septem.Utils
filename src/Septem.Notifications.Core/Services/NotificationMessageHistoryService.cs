@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -13,18 +12,18 @@ namespace Septem.Notifications.Core.Services;
 
 internal class NotificationMessageHistoryService : INotificationMessageHistoryService
 {
-    private readonly INotificationMessageRepository _notificationMessageRepository;
+    private readonly NotificationDbContext _notificationDbContext;
     private readonly ILogger _logger;
 
-    public NotificationMessageHistoryService(ILoggerFactory loggerFactory, INotificationMessageRepository notificationMessageRepository)
+    public NotificationMessageHistoryService(ILoggerFactory loggerFactory, NotificationDbContext notificationDbContext)
     {
+        _notificationDbContext = notificationDbContext;
         _logger = loggerFactory.CreateLogger<NotificationMessageHistoryService>();
-        _notificationMessageRepository = notificationMessageRepository;
     }
 
     public async Task<ICollection<NotificationMessage>> GetNotificationHistoryAsync(Guid targetUid, NotificationTokenType tokenType, CancellationToken cancellationToken = default)
     {
-        var messages = await _notificationMessageRepository.CollectionQuery
+        var messages = await _notificationDbContext.NotificationMessages
             .AsNoTracking()
             .Where(x => x.NotificationToken.TargetUid == targetUid && x.NotificationToken.Type == tokenType &&
                         (x.Status == NotificationMessageStatus.Success || x.Status == NotificationMessageStatus.Failed))
@@ -48,7 +47,7 @@ internal class NotificationMessageHistoryService : INotificationMessageHistorySe
 
     public async Task<ICollection<NotificationMessage>> GetNotificationHistoryAsync(Guid targetUid, CancellationToken cancellationToken = default)
     {
-        var messages = await _notificationMessageRepository.CollectionQuery
+        var messages = await _notificationDbContext.NotificationMessages
             .AsNoTracking()
             .Where(x => x.NotificationToken.TargetUid == targetUid &&
                         (x.Status == NotificationMessageStatus.Success || x.Status == NotificationMessageStatus.Failed))
@@ -72,7 +71,7 @@ internal class NotificationMessageHistoryService : INotificationMessageHistorySe
 
     public async Task<int> GetNotViewedMessagesCountAsync(Guid targetUid, CancellationToken cancellationToken = default)
     {
-        return await _notificationMessageRepository.CollectionQuery
+        return await _notificationDbContext.NotificationMessages
             .AsNoTracking()
             .Where(x => x.NotificationToken.TargetUid == targetUid && !x.IsView &&
                         (x.Status == NotificationMessageStatus.Success ||
@@ -82,14 +81,14 @@ internal class NotificationMessageHistoryService : INotificationMessageHistorySe
 
     public async Task SetMessageViewedAsync(Guid messageUid, CancellationToken cancellationToken = default)
     {
-        var message = await _notificationMessageRepository.CollectionQuery
+        var message = await _notificationDbContext.NotificationMessages
             .Where(x => x.Uid == messageUid)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (message is { IsView: false })
         {
             message.IsView = true;
-            await _notificationMessageRepository.SaveChangesAsync(cancellationToken);
+            await _notificationDbContext.SaveChangesAsync(cancellationToken);
             _logger.LogInformation($"Message viewed update: Uid: {message.Uid}");
         }
     }

@@ -14,13 +14,13 @@ namespace Septem.Notifications.Core.Services.Token;
 internal class BaseNotificationTokenService
 {
     protected readonly IServiceProvider ServiceProvider;
-    protected readonly INotificationTokenRepository NotificationTokenRepository;
+    protected readonly NotificationDbContext NotificationDbContext;
     protected readonly ILogger Logger;
     protected readonly NotificationTokenType TokenType;
-    public BaseNotificationTokenService(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, INotificationTokenRepository notificationTokenRepository, NotificationTokenType tokenType)
+    public BaseNotificationTokenService(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, NotificationDbContext notificationDbContext, NotificationTokenType tokenType)
     {
         ServiceProvider = serviceProvider;
-        NotificationTokenRepository = notificationTokenRepository;
+        NotificationDbContext = notificationDbContext;
         Logger = loggerFactory.CreateLogger(GetType());
         TokenType = tokenType;
     }
@@ -41,7 +41,7 @@ internal class BaseNotificationTokenService
 
     protected virtual async Task<ICollection<NotificationTokenEntity>> GetByTargetUid(Guid targetUid, CancellationToken cancellationToken)
     {
-        var tokens = await NotificationTokenRepository.CollectionQuery
+        var tokens = await NotificationDbContext.NotificationTokens
             .Where(x => x.Type == TokenType)
             .Where(x => targetUid == x.TargetUid)
             .ToListAsync(cancellationToken);

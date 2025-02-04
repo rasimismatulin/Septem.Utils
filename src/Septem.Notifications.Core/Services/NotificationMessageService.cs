@@ -19,30 +19,26 @@ namespace Septem.Notifications.Core.Services;
 internal class NotificationMessageService : INotificationMessageService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly INotificationRepository _notificationRepository;
-    private readonly INotificationMessageRepository _notificationMessageRepository;
     private readonly NotificationTokenServiceProvider _notificationTokenServiceProvider;
+    private readonly NotificationDbContext _notificationDbContext;
     private readonly NotificationSenderServiceProvider _notificationSenderServiceProvider;
     private readonly ILogger _logger;
 
     public NotificationMessageService(IServiceProvider serviceProvider, ILoggerFactory loggerFactory,
-        INotificationRepository notificationRepository,
-        INotificationMessageRepository notificationMessageRepository,
-        NotificationTokenServiceProvider notificationTokenServiceProvider,
+        NotificationTokenServiceProvider notificationTokenServiceProvider, NotificationDbContext notificationDbContext,
         NotificationSenderServiceProvider notificationSenderServiceProvider)
     {
         _logger = loggerFactory.CreateLogger<NotificationMessageService>();
         _serviceProvider = serviceProvider;
-        _notificationRepository = notificationRepository;
-        _notificationMessageRepository = notificationMessageRepository;
         _notificationTokenServiceProvider = notificationTokenServiceProvider;
+        _notificationDbContext = notificationDbContext;
         _notificationSenderServiceProvider = notificationSenderServiceProvider;
     }
 
     public async Task<ICollection<Guid>> GetPendingNotificationsUidAsync(int batchSize, CancellationToken cancellationToken = default)
     {
-        var notifications = await _notificationRepository.CollectionQuery
-            .Where(x => x.Status == NotificationStatus.Pending && x.TimeToSendUtc <= DateTime.UtcNow)
+        var notifications = await _notificationDbContext.Notifications
+            .Where(x => x.Status == NotificationStatus.Pending && x.TimeToSendUtc <= DateTimeOffset.UtcNow)
             .OrderBy(x => x.TimeToSendUtc)
             .Take(batchSize)
             .ToListAsync(cancellationToken);
@@ -50,17 +46,17 @@ internal class NotificationMessageService : INotificationMessageService
         foreach (var notification in notifications)
         {
             notification.Status = NotificationStatus.WaitReceiversCreation;
-            notification.ModifiedDateUtc = DateTime.UtcNow;
+            notification.ModifiedDateUtc = DateTimeOffset.UtcNow;
         }
 
-        await _notificationRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
 
         return notifications.Select(x => x.Uid).ToArray();
     }
 
     public async Task<ICollection<Guid>> GetNextNotificationsUidAsync(int batchSize, CancellationToken cancellationToken = default)
     {
-        var notifications = await _notificationRepository.CollectionQuery
+        var notifications = await _notificationDbContext.Notifications
             .Where(x => x.Status == NotificationStatus.ReceiversCreated)
             .OrderBy(x => x.TimeToSendUtc)
             .Take(batchSize)
@@ -69,34 +65,34 @@ internal class NotificationMessageService : INotificationMessageService
         foreach (var notification in notifications)
         {
             notification.Status = NotificationStatus.WaitMessagesCreation;
-            notification.ModifiedDateUtc = DateTime.UtcNow;
+            notification.ModifiedDateUtc = DateTimeOffset.UtcNow;
         }
-        await _notificationRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
 
         return notifications.Select(x => x.Uid).ToArray();
     }
 
     public async Task<ICollection<Guid>> GetNextMessagesUidAsync(int batchSize, CancellationToken cancellationToken = default)
     {
-        var messages = await _notificationMessageRepository.CollectionQuery
+        var messages = await _notificationDbContext.NotificationMessages
             .Where(x => x.Status == NotificationMessageStatus.Pending)
             .OrderBy(x => x.CreatedDateUtc)
             .ToListAsync(cancellationToken);
 
         foreach (var message in messages)
         {
-            message.ModifiedDateUtc = DateTime.UtcNow;
+            message.ModifiedDateUtc = DateTimeOffset.UtcNow;
             message.Status = NotificationMessageStatus.Processing;
         }
 
-        await _notificationMessageRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
 
         return messages.Select(x => x.Uid).ToArray();
     }
 
     public async Task CreateNotificationReceiversAsync(Guid notificationUid, CancellationToken cancellationToken)
     {
-        var notification = await _notificationRepository.CollectionQuery
+        var notification = await _notificationDbContext.Notifications
             .Include(x => x.Receivers)
             .Where(x => x.Uid == notificationUid)
             .FirstOrDefaultAsync(cancellationToken);
@@ -111,9 +107,9 @@ internal class NotificationMessageService : INotificationMessageService
             _logger.LogWarning("Couldn't activate INotificationReceiverPrepareService instance to use parameterized receiver");
 
             notification.Status = NotificationStatus.ReceiversCreated;
-            notification.ModifiedDateUtc = DateTime.UtcNow;
+            notification.ModifiedDateUtc = DateTimeOffset.UtcNow;
 
-            await _notificationRepository.SaveChangesAsync(cancellationToken);
+            await _notificationDbContext.SaveChangesAsync(cancellationToken);
             _logger.LogInformation($"Notification status saved: Uid:{notification.Uid}; Status:{notification.Status};");
             return;
         }
@@ -137,16 +133,16 @@ internal class NotificationMessageService : INotificationMessageService
         }
         
         notification.Status = NotificationStatus.ReceiversCreated;
-        notification.ModifiedDateUtc = DateTime.UtcNow;
+        notification.ModifiedDateUtc = DateTimeOffset.UtcNow;
 
-        await _notificationRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
         _logger.LogInformation($"Notification status saved: Uid:{notification.Uid}; Status:{notification.Status};");
     }
 
 
     public async Task CreateNotificationMessagesAsync(Guid notificationUid, CancellationToken cancellationToken = default)
     {
-        var notification = await _notificationRepository.CollectionQuery
+        var notification = await _notificationDbContext.Notifications
             .Include(x => x.Receivers)
             .Where(x => x.Uid == notificationUid)
             .FirstOrDefaultAsync(cancellationToken);
@@ -179,15 +175,15 @@ internal class NotificationMessageService : INotificationMessageService
                     message.NotificationTokenUid = notificationTokenEntity.Uid;
                 }
 
-                await _notificationMessageRepository.AddMessageAsync(message, cancellationToken);
+                _notificationDbContext.NotificationMessages.Add(message);
                 _logger.LogInformation($"Notification message created: Uid:{notification.Uid}; TargetUid:{message.NotificationTokenUid}; Token: {message.Token}");
             }
         }
 
         notification.Status = NotificationStatus.MessagesCreated;
-        notification.ModifiedDateUtc = DateTime.UtcNow;
+        notification.ModifiedDateUtc = DateTimeOffset.UtcNow;
 
-        await _notificationRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
         _logger.LogInformation($"Notification status saved: Uid:{notification.Uid}; Status:{notification.Status};");
     }
 
@@ -195,7 +191,7 @@ internal class NotificationMessageService : INotificationMessageService
     {
         var localizationService = _serviceProvider.GetService<INotificationLocalizationService>();
 
-        var message = await _notificationMessageRepository.CollectionQuery
+        var message = await _notificationDbContext.NotificationMessages
             .Where(x => x.Uid == messageUid)
             .Include(x => x.Notification)
             .Include(x => x.NotificationToken)
@@ -240,8 +236,8 @@ internal class NotificationMessageService : INotificationMessageService
 
                 message.Status = NotificationMessageStatus.Failed;
                 message.ExceptionMessage = "Token not provider for this message";
-                message.ModifiedDateUtc = DateTime.UtcNow;
-                await _notificationMessageRepository.SaveChangesAsync(cancellationToken);
+                message.ModifiedDateUtc = DateTimeOffset.UtcNow;
+                await _notificationDbContext.SaveChangesAsync(cancellationToken);
                 _logger.LogError($"Notification sent failed: Uid:{notification.Uid}");
                 return;
             }
@@ -256,8 +252,8 @@ internal class NotificationMessageService : INotificationMessageService
 
         _logger.LogInformation($"Service response: Uid:{notification.Uid}; IsSuccess:{result.IsSuccess}; ServiceMessage:{result.ServiceMessage} ExceptionMessage:{result.ExceptionMessage}");
 
-        message.ModifiedDateUtc = DateTime.UtcNow;
-        await _notificationMessageRepository.SaveChangesAsync(cancellationToken);
+        message.ModifiedDateUtc = DateTimeOffset.UtcNow;
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
         _logger.LogInformation($"Notification sent: Uid:{notification.Uid}");
     }
 

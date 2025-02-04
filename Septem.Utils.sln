@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Septem.Utils.EmailSender", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Septem.Utils.TelegramBotSender", "src\Septem.Utils.TelegramBotSender\Septem.Utils.TelegramBotSender.csproj", "{DACFCD51-C340-4A7E-9F31-16075FE6445B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Septem.Notifications.Worker", "src\Septem.Notifications.Worker\Septem.Notifications.Worker.csproj", "{E82ECB52-0C86-415F-9AD2-7717076B9B20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{DACFCD51-C340-4A7E-9F31-16075FE6445B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DACFCD51-C340-4A7E-9F31-16075FE6445B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DACFCD51-C340-4A7E-9F31-16075FE6445B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82ECB52-0C86-415F-9AD2-7717076B9B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82ECB52-0C86-415F-9AD2-7717076B9B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82ECB52-0C86-415F-9AD2-7717076B9B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82ECB52-0C86-415F-9AD2-7717076B9B20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +125,7 @@ Global
 		{711B9E68-B838-4C66-B88E-9CBA1215EC1C} = {F6946385-CF87-4081-980F-AAE9F6F4ABC9}
 		{BAB5A865-3602-4C28-BCA9-3C2AFC4CA777} = {074DE98B-D4FB-4DD1-9379-05372B486750}
 		{230DCFFC-E874-4915-A6FE-32D2A8294867} = {074DE98B-D4FB-4DD1-9379-05372B486750}
+		{E82ECB52-0C86-415F-9AD2-7717076B9B20} = {F6946385-CF87-4081-980F-AAE9F6F4ABC9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1B64DEB-4A2A-41C3-BA74-384BCB9FFC07}

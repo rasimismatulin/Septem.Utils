@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Septem.Notifications.Abstractions;
 
 namespace Septem.Notifications.Core.Entities;
@@ -7,11 +8,12 @@ namespace Septem.Notifications.Core.Entities;
 internal class NotificationTokenEntity
 {
     [Key]
+    [Column("id")]
     public Guid Uid { get; set; }
 
-    public DateTime CreatedDateUtc { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset CreatedDateUtc { get; set; } = DateTimeOffset.UtcNow;
 
-    public DateTime? ModifiedDateUtc { get; set; }
+    public DateTimeOffset? ModifiedDateUtc { get; set; }
 
     public bool IsDeleted { get; set; } = false;
 

@@ -8,6 +8,7 @@ namespace Septem.Notifications.Core.Entities;
 internal class NotificationReceiverEntity
 {
     [Key]
+    [Column("id")]
     public Guid Uid { get; set; }
 
     public Guid? TargetUid { get; set; }

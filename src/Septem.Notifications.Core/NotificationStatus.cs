@@ -3,14 +3,14 @@ namespace Septem.Notifications.Core;
 
 public enum NotificationStatus : byte
 {
-    Pending,
-    Canceled,
+    Pending = 0,
+    Canceled = 1,
 
-    WaitReceiversCreation,
-    ReceiversCreated,
+    WaitReceiversCreation = 2,
+    ReceiversCreated = 3,
 
-    WaitMessagesCreation,
-    MessagesCreated,
+    WaitMessagesCreation = 4,
+    MessagesCreated = 5,
 
-    Failed
+    Failed = 6
 }

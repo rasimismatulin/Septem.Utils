@@ -1,36 +1,37 @@
-﻿using System.Collections.Generic;
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.Extensions.DependencyInjection;
+using Septem.Notifications.Core.Services.Sender;
 
 namespace Septem.Notifications.Core.Config;
 
 public class FcmConfigurationBuilder
 {
-    private readonly List<FcmAppConfiguration> _configurations;
+    private readonly IServiceCollection _services;
 
-    public FcmConfigurationBuilder()
+    public FcmConfigurationBuilder(IServiceCollection services)
     {
-        _configurations = new List<FcmAppConfiguration>();
+        _services = services;
+    }
+    public FcmConfigurationBuilder Default()
+    {
+        _services.AddTransient<FcmNotificationSenderService>();
+        return this;
     }
 
     public void AddInstance(string privateUserSecretKey)
     {
-        _configurations.Add(new FcmAppConfiguration("Default", privateUserSecretKey));
+        FirebaseApp.Create(new AppOptions
+        {
+            Credential = GoogleCredential.FromJson(privateUserSecretKey)
+        }, "Default");
     }
 
     public void AddInstance(string instanceName, string privateUserSecretKey)
     {
-        _configurations.Add(new FcmAppConfiguration(instanceName, privateUserSecretKey));
-    }
-
-    public void Build()
-    {
-        foreach (var fcmAppConfiguration in _configurations)
+        FirebaseApp.Create(new AppOptions
         {
-            FirebaseApp.Create(new AppOptions
-            {
-                Credential = GoogleCredential.FromJson(fcmAppConfiguration.PrivateUserSecretKey)
-            }, fcmAppConfiguration.InstanceName);
-        }
+            Credential = GoogleCredential.FromJson(privateUserSecretKey)
+        }, instanceName);
     }
 }

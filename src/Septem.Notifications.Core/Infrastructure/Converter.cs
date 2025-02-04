@@ -14,7 +14,7 @@ internal static class Converter
         return new NotificationEntity
         {
             Uid = default,
-            CreatedDateUtc = DateTime.UtcNow,
+            CreatedDateUtc = DateTimeOffset.UtcNow,
             TimeToSendUtc = notification.TimeToSendUtc,
             IsDeleted = false,
             ModifiedDateUtc = default,

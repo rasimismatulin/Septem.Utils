@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Septem.Notifications.Abstractions;
+using Septem.Notifications.Core.Services.Sender.Email;
+using Septem.Notifications.Core.Services.Sender.Sms;
 
 namespace Septem.Notifications.Core.Services.Sender;
 

@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Septem.Notifications.Jobs.Config;
+using Septem.Notifications.Worker.Config;
 
-namespace Septem.Notifications.Jobs.JobExecution;
+namespace Septem.Notifications.Worker.JobExecution;
 
 internal class ConcurrentQueueDispatcher
 {

@@ -1,19 +1,36 @@
-﻿namespace Septem.Notifications.Core.Config;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Septem.Notifications.Core.Services.Sender.Email;
+
+namespace Septem.Notifications.Core.Config;
 
 public class EmailOptionBuilder
 {
-    public static EmailProvider EmailOptionProvider;
+    private readonly IServiceCollection _services;
+    internal static string MailFromLogin { get; set; }
+    internal static string MailFromName { get; set; }
+    internal static string MailFromPassword { get; set; }
+    internal static int SmtpPort { get; set; }
+    internal static string SmtpHost { get; set; }
 
-
-    public string MailFromLogin { get; set; }
-    public string MailFromName { get; set; }
-    public string MailFromPassword { get; set; }
-
-    public int SmtpPort { get; set; }
-    public string SmtpHost { get; set; }
-
-    public void Build()
+    public EmailOptionBuilder(IServiceCollection services)
     {
-        EmailOptionProvider = new EmailProvider(MailFromLogin, MailFromName, MailFromPassword, SmtpPort, SmtpHost);
+        _services = services;
+    }
+
+    public EmailOptionBuilder Default()
+    {
+        _services.AddTransient<EmailNotificationSenderService>();
+        return this;
+    }
+
+    public EmailOptionBuilder ReadFromConfiguration(IConfigurationSection configuration)
+    {
+        MailFromLogin = configuration["MailFromLogin"];
+        MailFromName = configuration["MailFromName"];
+        MailFromPassword = configuration["MailFromPassword"];
+        SmtpPort = int.Parse(configuration["SmtpPort"]!);
+        SmtpHost = configuration["SmtpHost"];
+        return this;
     }
 }

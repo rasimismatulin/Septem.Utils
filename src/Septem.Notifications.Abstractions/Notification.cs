@@ -16,7 +16,7 @@ public class Notification
 
     public string Data { get; set; }
 
-    public DateTime TimeToSendUtc { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset TimeToSendUtc { get; set; } = DateTimeOffset.UtcNow;
 
     public string DefaultLanguage { get; set; }
 
@@ -59,13 +59,7 @@ public class Notification
         return this;
     }
 
-    public Notification Schedule(DateTime dateTimeUtc)
-    {
-        TimeToSendUtc = dateTimeUtc.ToUniversalTime();
-        return this;
-    }
-
-    public Notification ScheduleUtc(DateTime dateTimeUtc)
+    public Notification Schedule(DateTimeOffset dateTimeUtc)
     {
         TimeToSendUtc = dateTimeUtc;
         return this;

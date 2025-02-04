@@ -5,7 +5,7 @@ namespace Septem.Notifications.Abstractions;
 
 public class FcmConfiguration
 {
-    private readonly Dictionary<string, string> _internalData;
+    private readonly Dictionary<string, string> _internalData = new();
 
     public string InstanceName { get; set; }
 
@@ -15,11 +15,6 @@ public class FcmConfiguration
 
     public string Color { get; set; }
 
-
-    public FcmConfiguration()
-    {
-        _internalData = new Dictionary<string, string>();
-    }
 
     public FcmConfiguration SetColor(Color color)
     {
@@ -41,11 +36,7 @@ public class FcmConfiguration
 
     public FcmConfiguration AddData(string key, string value)
     {
-        if (_internalData.ContainsKey(key))
-            _internalData[key] = value;
-        else
-            _internalData.Add(key, value);
-
+        _internalData[key] = value;
         return this;
     }
 

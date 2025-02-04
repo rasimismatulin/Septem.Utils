@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Septem.Notifications.Core.Entities;
 
 internal class NotificationEntity
 {
     [Key]
+    [Column("id")]
     public Guid Uid { get; set; }
 
-    public DateTime CreatedDateUtc { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset CreatedDateUtc { get; set; } = DateTimeOffset.UtcNow;
 
-    public DateTime TimeToSendUtc { get; set; }
+    public DateTimeOffset TimeToSendUtc { get; set; }
 
-    public DateTime? ModifiedDateUtc { get; set; }
+    public DateTimeOffset? ModifiedDateUtc { get; set; }
 
     public bool IsDeleted { get; set; } = false;
 

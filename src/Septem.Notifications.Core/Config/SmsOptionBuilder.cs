@@ -1,16 +1,28 @@
-﻿namespace Septem.Notifications.Core.Config;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using Septem.Notifications.Abstractions;
+using Septem.Notifications.Core.Services.Sender.Sms;
+
+namespace Septem.Notifications.Core.Config;
+
+public delegate string RestSmsUrlBuilder(IServiceProvider serviceProvider, Notification notification, string token, string payload);
+public delegate bool RestSmsResponseValidator(IServiceProvider serviceProvider, Notification notification, string response);
 
 public class SmsOptionBuilder
 {
-    public static SmsUrlProvider SmsOptionProvider;
+    private readonly IServiceCollection _services;
+    internal static RestSmsUrlBuilder UrlBuilder;
+    internal static RestSmsResponseValidator Validator;
 
-    public string ApiEndpoint { get; set; }
-    public string UserName { get; set; }
-    public string Password { get; set; }
-    public string SenderName { get; set; }
-
-    public void Build()
+    public SmsOptionBuilder(IServiceCollection services)
     {
-        SmsOptionProvider = new SmsUrlProvider(ApiEndpoint, UserName, Password, SenderName);
+        _services = services;
+    }
+
+    public void Default(RestSmsUrlBuilder urlBuilder, RestSmsResponseValidator validator)
+    {
+        _services.AddTransient<SmsNotificationSenderService>();
+        UrlBuilder = urlBuilder;
+        Validator = validator;
     }
 }

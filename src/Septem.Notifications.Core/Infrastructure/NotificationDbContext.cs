@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Septem.Notifications.Core.Entities;
@@ -34,26 +34,28 @@ internal class NotificationDbContext : DbContext
             return;
 
         var connectionString = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.notifications.designtime.json")
             .Build()
             .GetConnectionString("DefaultConnection");
-        optionsBuilder.UseNpgsql(connectionString);
+        optionsBuilder.UseNpgsql(connectionString)
+            .UseSnakeCaseNamingConvention();
     }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        using (var enumerator = modelBuilder.Model.GetEntityTypes().SelectMany(t => t.GetForeignKeys()).Where(fk =>
-               {
-                   if (!fk.IsOwnership)
-                       return fk.DeleteBehavior == DeleteBehavior.Cascade;
-                   return false;
-               }).GetEnumerator())
-        {
-            while (enumerator.MoveNext())
-                if (enumerator.Current != null)
-                    enumerator.Current.DeleteBehavior = DeleteBehavior.Restrict;
-        }
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties())
+            {
+                if (property.ClrType == typeof(DateTimeOffset))
+                    property.SetValueConverter(new DateTimeOffsetToUtcConverter());
+                if (property.ClrType == typeof(DateTimeOffset?))
+                    property.SetValueConverter(new NullableDateTimeOffsetToUtcConverter());
+            }
+        }
         base.OnModelCreating(modelBuilder);
     }
 }

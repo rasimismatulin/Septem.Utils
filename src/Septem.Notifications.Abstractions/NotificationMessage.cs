@@ -11,12 +11,9 @@ public class NotificationMessage
 
     public string Payload { get; set; }
 
-    public DateTime CreatedDateUtc { get; set; }
-    public DateTime SentDateUtc { get; set; }
-
-    public DateTime CreatedDate => CreatedDateUtc.ToLocalTime();
-    public DateTime SentDate => SentDateUtc.ToLocalTime();
-
+    public DateTimeOffset CreatedDateUtc { get; set; }
+    public DateTimeOffset SentDateUtc { get; set; }
+    
     public NotificationTokenType TokenType { get; set; }
 
     public bool IsSuccess { get; set; }

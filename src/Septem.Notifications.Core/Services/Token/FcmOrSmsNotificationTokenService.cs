@@ -13,8 +13,8 @@ namespace Septem.Notifications.Core.Services.Token;
 
 internal class FcmOrSmsNotificationTokenService : BaseNotificationTokenService, INotificationTokenFindService
 {
-    public FcmOrSmsNotificationTokenService(INotificationTokenRepository notificationTokenRepository, IServiceProvider serviceProvider, ILoggerFactory loggerFactory) :
-        base(serviceProvider, loggerFactory, notificationTokenRepository, NotificationTokenType.Fcm)
+    public FcmOrSmsNotificationTokenService(NotificationDbContext notificationDbContext, IServiceProvider serviceProvider, ILoggerFactory loggerFactory) :
+        base(serviceProvider, loggerFactory, notificationDbContext, NotificationTokenType.Fcm)
     {
     }
 
@@ -25,13 +25,13 @@ internal class FcmOrSmsNotificationTokenService : BaseNotificationTokenService, 
 
     protected override async Task<ICollection<NotificationTokenEntity>> GetByTargetUid(Guid targetUid, CancellationToken cancellationToken)
     {
-        var tokens = await NotificationTokenRepository.CollectionQuery
+        var tokens = await NotificationDbContext.NotificationTokens
             .Where(x => x.Type == TokenType && targetUid == x.TargetUid)
             .ToListAsync(cancellationToken);
 
         if (!tokens.Any())
         {
-            var newTokens = await NotificationTokenRepository.CollectionQuery
+            var newTokens = await NotificationDbContext.NotificationTokens
                 .Where(x => x.Type == NotificationTokenType.Sms && targetUid == x.TargetUid)
                 .ToListAsync(cancellationToken);
 

@@ -8,11 +8,12 @@ namespace Septem.Notifications.Core.Entities;
 internal class NotificationMessageEntity
 {
     [Key]
+    [Column("id")]
     public Guid Uid { get; set; }
 
-    public DateTime CreatedDateUtc { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset CreatedDateUtc { get; set; } = DateTimeOffset.UtcNow;
 
-    public DateTime? ModifiedDateUtc { get; set; }
+    public DateTimeOffset? ModifiedDateUtc { get; set; }
 
     public bool IsDeleted { get; set; } = false;
 

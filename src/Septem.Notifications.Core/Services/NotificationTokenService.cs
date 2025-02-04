@@ -12,18 +12,18 @@ namespace Septem.Notifications.Core.Services;
 
 internal class NotificationTokenService : INotificationTokenService
 {
-    private readonly INotificationTokenRepository _notificationTokenRepository;
+    private readonly NotificationDbContext _notificationDbContext;
     private readonly ILogger _logger;
 
-    public NotificationTokenService(ILoggerFactory loggerFactory, INotificationTokenRepository notificationTokenRepository)
+    public NotificationTokenService(ILoggerFactory loggerFactory, NotificationDbContext notificationDbContext)
     {
+        _notificationDbContext = notificationDbContext;
         _logger = loggerFactory.CreateLogger<NotificationTokenService>();
-        _notificationTokenRepository = notificationTokenRepository;
     }
 
     public async Task<ICollection<NotificationToken>> GetAsync(Guid targetUid, CancellationToken cancellationToken = default)
     {
-        var entities = await _notificationTokenRepository.CollectionQuery
+        var entities = await _notificationDbContext.NotificationTokens
             .AsNoTracking()
             .Where(x => x.TargetUid == targetUid)
             .ToListAsync(cancellationToken);
@@ -33,7 +33,7 @@ internal class NotificationTokenService : INotificationTokenService
 
     public async Task<ICollection<NotificationToken>> GetAsync(Guid targetUid, NotificationTokenType type, CancellationToken cancellationToken = default)
     {
-        var entities = await _notificationTokenRepository.CollectionQuery
+        var entities = await _notificationDbContext.NotificationTokens
             .AsNoTracking()
             .Where(x => x.TargetUid == targetUid &&
                         x.Type == type)
@@ -44,7 +44,7 @@ internal class NotificationTokenService : INotificationTokenService
 
     public async Task<NotificationToken> GetAsync(Guid targetUid, NotificationTokenType type, string deviceUid, CancellationToken cancellationToken = default)
     {
-        var entity = await _notificationTokenRepository.CollectionQuery
+        var entity = await _notificationDbContext.NotificationTokens
             .AsNoTracking()
             .Where(x => x.TargetUid == targetUid &&
                         x.Type == type &&
@@ -56,7 +56,7 @@ internal class NotificationTokenService : INotificationTokenService
 
     public async Task SaveAsync(NotificationToken notificationToken, CancellationToken cancellationToken = default)
     {
-        var entity = await _notificationTokenRepository.CollectionQuery
+        var entity = await _notificationDbContext.NotificationTokens
              .Where(x => x.TargetUid == notificationToken.TargetUid &&
                          x.Type == notificationToken.Type &&
                          x.DeviceId == notificationToken.DeviceId)
@@ -65,13 +65,13 @@ internal class NotificationTokenService : INotificationTokenService
         if (entity == default)
         {
             entity = Converter.GetNotificationTokenEntity(notificationToken);
-            await _notificationTokenRepository.AddAsync(entity, cancellationToken);
+            _notificationDbContext.NotificationTokens.Add(entity);
         }
         else
         {
             if (entity.Token != notificationToken.Token)
             {
-                entity.ModifiedDateUtc = DateTime.UtcNow;
+                entity.ModifiedDateUtc = DateTimeOffset.UtcNow;
                 entity.Token = notificationToken.Token;
             }
 
@@ -79,20 +79,20 @@ internal class NotificationTokenService : INotificationTokenService
             {
                 if (entity.Language != notificationToken.Language)
                 {
-                    entity.ModifiedDateUtc = DateTime.UtcNow;
+                    entity.ModifiedDateUtc = DateTimeOffset.UtcNow;
                     entity.Language = notificationToken.Language;
                 }
             }
         }
 
-        await _notificationTokenRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
         notificationToken.Uid = entity.Uid;
         _logger.LogInformation($"Notification token saved: Uid: {notificationToken.Uid}; TargetUid: {notificationToken.TargetUid};");
     }
 
     public async Task SaveLanguageAsync(string language, Guid targetUid, NotificationTokenType tokenType, string deviceId, CancellationToken cancellationToken = default)
     {
-        var entities = await _notificationTokenRepository.CollectionQuery
+        var entities = await _notificationDbContext.NotificationTokens
             .Where(x => x.TargetUid == targetUid &&
                         x.Type == tokenType &&
                         x.DeviceId == deviceId)
@@ -104,12 +104,12 @@ internal class NotificationTokenService : INotificationTokenService
             _logger.LogInformation($"Notification token language saved: Uid: {entity.Uid}; TargetUid: {targetUid}; Language: {language}");
         }
 
-        await _notificationTokenRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task SaveLanguageAsync(string language, Guid targetUid, NotificationTokenType tokenType, CancellationToken cancellationToken = default)
     {
-        var entities = await _notificationTokenRepository.CollectionQuery
+        var entities = await _notificationDbContext.NotificationTokens
             .Where(x => x.TargetUid == targetUid &&
                         x.Type == tokenType)
             .ToListAsync(cancellationToken);
@@ -120,12 +120,12 @@ internal class NotificationTokenService : INotificationTokenService
             _logger.LogInformation($"Notification token language saved: Uid: {entity.Uid}; TargetUid: {targetUid}; Language: {language}");
         }
 
-        await _notificationTokenRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task SaveLanguageAsync(string language, Guid targetUid, CancellationToken cancellationToken = default)
     {
-        var entities = await _notificationTokenRepository.CollectionQuery
+        var entities = await _notificationDbContext.NotificationTokens
             .Where(x => x.TargetUid == targetUid)
             .ToListAsync(cancellationToken);
 
@@ -135,7 +135,7 @@ internal class NotificationTokenService : INotificationTokenService
             _logger.LogInformation($"Notification token language saved: Uid: {entity.Uid}; TargetUid: {targetUid}; Language: {language}");
         }
 
-        await _notificationTokenRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task SaveAsync(IEnumerable<NotificationToken> notificationToken, CancellationToken cancellationToken = default)
@@ -146,7 +146,7 @@ internal class NotificationTokenService : INotificationTokenService
 
     public async Task RemoveAsync(Guid targetUid, NotificationTokenType type, CancellationToken cancellationToken = default)
     {
-        var entities = await _notificationTokenRepository.CollectionQuery
+        var entities = await _notificationDbContext.NotificationTokens
             .Where(x => x.TargetUid == targetUid &&
                         x.Type == type)
             .ToListAsync(cancellationToken);
@@ -157,12 +157,12 @@ internal class NotificationTokenService : INotificationTokenService
             _logger.LogInformation($"Notification token removed: Uid: {entity.Uid}; TargetUid: {targetUid};");
         }
 
-        await _notificationTokenRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task RemoveAsync(Guid targetUid, NotificationTokenType type, string deviceUid, CancellationToken cancellationToken = default)
     {
-        var entities = await _notificationTokenRepository.CollectionQuery
+        var entities = await _notificationDbContext.NotificationTokens
             .Where(x => x.TargetUid == targetUid &&
                         x.DeviceId == deviceUid &&
                         x.Type == type)
@@ -174,6 +174,6 @@ internal class NotificationTokenService : INotificationTokenService
             _logger.LogInformation($"Notification token removed: Uid: {entity.Uid}; TargetUid: {targetUid};");
         }
 
-        await _notificationTokenRepository.SaveChangesAsync(cancellationToken);
+        await _notificationDbContext.SaveChangesAsync(cancellationToken);
     }
 }
