@@ -11,8 +11,8 @@ namespace Septem.Notifications.Core.Services.Token;
 
 internal class EmailNotificationTokenService : BaseNotificationTokenService, INotificationTokenFindService
 {
-    public EmailNotificationTokenService(NotificationDbContext notificationDbContext, IServiceProvider serviceProvider, ILoggerFactory loggerFactory) :
-        base(serviceProvider, loggerFactory, notificationDbContext, NotificationTokenType.Email)
+    public EmailNotificationTokenService(NotificationDbContext notificationDbContext, IServiceProvider serviceProvider, ILogger<EmailNotificationTokenService> logger) :
+        base(serviceProvider, logger, notificationDbContext, NotificationTokenType.Email)
     {
 
     }

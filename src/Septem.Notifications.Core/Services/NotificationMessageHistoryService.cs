@@ -15,10 +15,10 @@ internal class NotificationMessageHistoryService : INotificationMessageHistorySe
     private readonly NotificationDbContext _notificationDbContext;
     private readonly ILogger _logger;
 
-    public NotificationMessageHistoryService(ILoggerFactory loggerFactory, NotificationDbContext notificationDbContext)
+    public NotificationMessageHistoryService(ILogger<NotificationMessageHistoryService> logger, NotificationDbContext notificationDbContext)
     {
         _notificationDbContext = notificationDbContext;
-        _logger = loggerFactory.CreateLogger<NotificationMessageHistoryService>();
+        _logger = logger;
     }
 
     public async Task<ICollection<NotificationMessage>> GetNotificationHistoryAsync(Guid targetUid, NotificationTokenType tokenType, CancellationToken cancellationToken = default)
@@ -91,5 +91,15 @@ internal class NotificationMessageHistoryService : INotificationMessageHistorySe
             await _notificationDbContext.SaveChangesAsync(cancellationToken);
             _logger.LogInformation($"Message viewed update: Uid: {message.Uid}");
         }
+    }
+
+    public void Dispose()
+    {
+        _notificationDbContext?.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_notificationDbContext != null) await _notificationDbContext.DisposeAsync();
     }
 }

@@ -13,10 +13,11 @@ internal abstract class BaseHostedService : BackgroundService
     protected readonly IServiceProvider ServiceProvider;
     private readonly string _serviceName;
     private bool _disableDelayAfterCurrentExecution;
+    private static int count = 0;
 
-    protected BaseHostedService(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+    protected BaseHostedService(IServiceProvider serviceProvider, ILogger logger)
     {
-        Logger = loggerFactory.CreateLogger(GetType());
+        Logger = logger;
         _serviceName = GetType().Name;
         ServiceProvider = serviceProvider;
     }
@@ -27,6 +28,7 @@ internal abstract class BaseHostedService : BackgroundService
         {
             try
             {
+                Interlocked.Increment(ref count);
                 await ExecuteInternalAsync(stoppingToken);
             }
             catch (Exception e)

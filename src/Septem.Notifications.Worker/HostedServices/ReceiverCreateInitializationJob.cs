@@ -12,8 +12,8 @@ namespace Septem.Notifications.Worker.HostedServices;
 
 internal class ReceiverCreateInitializationJob : BaseHostedService
 {
-    public ReceiverCreateInitializationJob(IServiceProvider serviceProvider, ILoggerFactory loggerFactory) : 
-        base(serviceProvider, loggerFactory)
+    public ReceiverCreateInitializationJob(IServiceProvider serviceProvider, ILogger<ReceiverCreateInitializationJob> logger) : 
+        base(serviceProvider, logger)
     {
 
     }
@@ -23,7 +23,7 @@ internal class ReceiverCreateInitializationJob : BaseHostedService
         var taskExecuteStrategyHandler = ServiceProvider.GetRequiredService<ITaskExecuteStrategyHandler>();
         if (taskExecuteStrategyHandler.CanHandle)
         {
-            var notificationMessageService = ServiceProvider.GetRequiredService<INotificationMessageService>();
+            await using var notificationMessageService = ServiceProvider.GetRequiredService<INotificationMessageService>();
             var notifications = await notificationMessageService.GetPendingNotificationsUidAsync(JobOptionsBuilder.ReceiverCreateJobBatchSize, cancellationToken);
 
             if (notifications.Any())

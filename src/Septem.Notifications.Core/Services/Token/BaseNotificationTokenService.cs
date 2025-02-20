@@ -11,17 +11,17 @@ using Septem.Notifications.Core.Infrastructure;
 
 namespace Septem.Notifications.Core.Services.Token;
 
-internal class BaseNotificationTokenService
+internal class BaseNotificationTokenService : IDisposable, IAsyncDisposable
 {
     protected readonly IServiceProvider ServiceProvider;
     protected readonly NotificationDbContext NotificationDbContext;
     protected readonly ILogger Logger;
     protected readonly NotificationTokenType TokenType;
-    public BaseNotificationTokenService(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, NotificationDbContext notificationDbContext, NotificationTokenType tokenType)
+    public BaseNotificationTokenService(IServiceProvider serviceProvider, ILogger<BaseNotificationTokenService> logger, NotificationDbContext notificationDbContext, NotificationTokenType tokenType)
     {
         ServiceProvider = serviceProvider;
         NotificationDbContext = notificationDbContext;
-        Logger = loggerFactory.CreateLogger(GetType());
+        Logger = logger;
         TokenType = tokenType;
     }
 
@@ -50,5 +50,15 @@ internal class BaseNotificationTokenService
             Logger.LogWarning($"Can't find token for Target: {targetUid}");
 
         return tokens;
+    }
+
+    public void Dispose()
+    {
+        NotificationDbContext?.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (NotificationDbContext != null) await NotificationDbContext.DisposeAsync();
     }
 }

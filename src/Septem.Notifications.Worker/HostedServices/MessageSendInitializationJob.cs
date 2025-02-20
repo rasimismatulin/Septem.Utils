@@ -13,8 +13,8 @@ namespace Septem.Notifications.Worker.HostedServices;
 internal class MessageSendInitializationJob : BaseHostedService
 {
 
-    public MessageSendInitializationJob(IServiceProvider serviceProvider, ILoggerFactory loggerFactory) 
-        : base(serviceProvider, loggerFactory)
+    public MessageSendInitializationJob(IServiceProvider serviceProvider, ILogger<MessageSendInitializationJob> logger) 
+        : base(serviceProvider, logger)
     {
     }
     protected override async Task ExecuteInternalAsync(CancellationToken cancellationToken)
@@ -22,7 +22,7 @@ internal class MessageSendInitializationJob : BaseHostedService
         var taskExecuteStrategyHandler = ServiceProvider.GetRequiredService<ITaskExecuteStrategyHandler>();
         if (taskExecuteStrategyHandler.CanHandle)
         {
-            var notificationMessageService = ServiceProvider.GetRequiredService<INotificationMessageService>();
+            await using var notificationMessageService = ServiceProvider.GetRequiredService<INotificationMessageService>();
             var messages = await notificationMessageService.GetNextMessagesUidAsync(JobOptionsBuilder.MessageSendJobBatchSize, cancellationToken);
 
             if (messages.Any())
@@ -35,7 +35,7 @@ internal class MessageSendInitializationJob : BaseHostedService
 
     private async Task SendMessages(IServiceProvider serviceProvider, Guid uid)
     {
-        var instance = serviceProvider.GetRequiredService<INotificationMessageService>();
+        await using var instance = serviceProvider.GetRequiredService<INotificationMessageService>();
         await instance.SendMessagesAsync(uid);
     }
 }

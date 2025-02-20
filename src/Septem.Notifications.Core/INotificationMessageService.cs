@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Septem.Notifications.Core;
 
-public interface INotificationMessageService
+public interface INotificationMessageService : IDisposable, IAsyncDisposable
 {
     Task<ICollection<Guid>> GetPendingNotificationsUidAsync(int batchSize, CancellationToken cancellationToken = default);
     Task CreateNotificationReceiversAsync(Guid notificationUid, CancellationToken cancellationToken = default);

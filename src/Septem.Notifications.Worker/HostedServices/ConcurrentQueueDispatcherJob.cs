@@ -14,9 +14,9 @@ internal class ConcurrentQueueDispatcherJob : BaseHostedService
     private readonly IServiceProvider _serviceProvider;
 
 
-    public ConcurrentQueueDispatcherJob(IServiceProvider serviceProvider, ILoggerFactory loggerFactory,
+    public ConcurrentQueueDispatcherJob(IServiceProvider serviceProvider, ILogger<ConcurrentQueueDispatcherJob> logger,
         ConcurrentQueueDispatcher concurrentCollectionDispatcher)
-        : base(serviceProvider, loggerFactory)
+        : base(serviceProvider, logger)
     {
         _concurrentCollectionDispatcher = concurrentCollectionDispatcher;
         _serviceProvider = serviceProvider;

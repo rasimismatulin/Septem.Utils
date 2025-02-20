@@ -61,7 +61,6 @@ internal class FcmNotificationSenderService : INotificationSenderService
 
             var msg = FirebaseMessaging.GetMessaging(FirebaseApp.GetInstance(instanceName));
             var response = await msg.SendAsync(fcmMessage, cancellationToken);
-
             return SentStatus.Success(response);
         }
         catch (Exception e)

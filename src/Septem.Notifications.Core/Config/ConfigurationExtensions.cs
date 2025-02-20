@@ -45,7 +45,7 @@ public class NotificationsCoreConfiguration
     {
         _services.AddDbContext<NotificationDbContext>((provider, optionsBuilder) =>
                 dbConfiguration(provider, optionsBuilder, typeof(ConfigurationExtensions).Assembly.FullName),
-            ServiceLifetime.Transient, ServiceLifetime.Transient);
+            ServiceLifetime.Transient, ServiceLifetime.Singleton);
         return this;
     }
 }

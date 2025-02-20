@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Septem.Notifications.Abstractions;
 
-public interface INotificationService
+public interface INotificationService : IDisposable, IAsyncDisposable
 {
     Task CreateNotificationAsync(Notification notification, Receiver receiver, CancellationToken cancellationToken = default);
 

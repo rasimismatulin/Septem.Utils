@@ -15,10 +15,10 @@ internal class NotificationTokenService : INotificationTokenService
     private readonly NotificationDbContext _notificationDbContext;
     private readonly ILogger _logger;
 
-    public NotificationTokenService(ILoggerFactory loggerFactory, NotificationDbContext notificationDbContext)
+    public NotificationTokenService(ILogger<NotificationTokenService> logger, NotificationDbContext notificationDbContext)
     {
         _notificationDbContext = notificationDbContext;
-        _logger = loggerFactory.CreateLogger<NotificationTokenService>();
+        _logger = logger;
     }
 
     public async Task<ICollection<NotificationToken>> GetAsync(Guid targetUid, CancellationToken cancellationToken = default)
@@ -175,5 +175,15 @@ internal class NotificationTokenService : INotificationTokenService
         }
 
         await _notificationDbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public void Dispose()
+    {
+        _notificationDbContext?.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_notificationDbContext != null) await _notificationDbContext.DisposeAsync();
     }
 }

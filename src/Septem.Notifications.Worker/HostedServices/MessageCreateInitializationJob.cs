@@ -12,8 +12,8 @@ namespace Septem.Notifications.Worker.HostedServices;
 
 internal class MessageCreateInitializationJob : BaseHostedService
 {
-    public MessageCreateInitializationJob(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
-        : base(serviceProvider, loggerFactory)
+    public MessageCreateInitializationJob(IServiceProvider serviceProvider, ILogger<MessageCreateInitializationJob> logger)
+        : base(serviceProvider, logger)
     {
     }
 
@@ -22,12 +22,15 @@ internal class MessageCreateInitializationJob : BaseHostedService
         var taskExecuteStrategyHandler = ServiceProvider.GetRequiredService<ITaskExecuteStrategyHandler>();
         if (taskExecuteStrategyHandler.CanHandle)
         {
-            var notificationMessageService = ServiceProvider.GetRequiredService<INotificationMessageService>();
-            var notifications = await notificationMessageService.GetNextNotificationsUidAsync(JobOptionsBuilder.MessageCreateJobBatchSize, cancellationToken);
+            await using var notificationMessageService = ServiceProvider.GetRequiredService<INotificationMessageService>();
+            var notifications =
+                await notificationMessageService.GetNextNotificationsUidAsync(
+                    JobOptionsBuilder.MessageCreateJobBatchSize, cancellationToken);
             if (notifications.Any())
             {
                 Logger.LogInformation($"Build Create messages tasks. Count: {notifications.Count}");
-                var tasks = notifications.Select(x => new Func<IServiceProvider, Task>(sp => CreteMessages(sp, x))).ToList();
+                var tasks = notifications.Select(x => new Func<IServiceProvider, Task>(sp => CreteMessages(sp, x)))
+                    .ToList();
                 await taskExecuteStrategyHandler.Handle(tasks);
             }
         }

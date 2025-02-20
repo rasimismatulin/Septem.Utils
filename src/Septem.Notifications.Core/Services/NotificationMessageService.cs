@@ -24,11 +24,11 @@ internal class NotificationMessageService : INotificationMessageService
     private readonly NotificationSenderServiceProvider _notificationSenderServiceProvider;
     private readonly ILogger _logger;
 
-    public NotificationMessageService(IServiceProvider serviceProvider, ILoggerFactory loggerFactory,
+    public NotificationMessageService(IServiceProvider serviceProvider, ILogger<NotificationMessageService> logger,
         NotificationTokenServiceProvider notificationTokenServiceProvider, NotificationDbContext notificationDbContext,
         NotificationSenderServiceProvider notificationSenderServiceProvider)
     {
-        _logger = loggerFactory.CreateLogger<NotificationMessageService>();
+        _logger = logger;
         _serviceProvider = serviceProvider;
         _notificationTokenServiceProvider = notificationTokenServiceProvider;
         _notificationDbContext = notificationDbContext;
@@ -100,7 +100,7 @@ internal class NotificationMessageService : INotificationMessageService
         if (notification == default)
             return;
 
-        var prepareService = _serviceProvider.GetService<INotificationReceiverPrepareService>();
+        await using var prepareService = _serviceProvider.GetService<INotificationReceiverPrepareService>();
 
         if (prepareService == null)
         {
@@ -152,7 +152,7 @@ internal class NotificationMessageService : INotificationMessageService
 
         foreach (var receiverEntity in notification.Receivers)
         {
-            var notificationTokenService = _notificationTokenServiceProvider.GetByReceiverType(receiverEntity.ReceiverType);
+            await using var notificationTokenService = _notificationTokenServiceProvider.GetByReceiverType(receiverEntity.ReceiverType);
 
             var tokens = await notificationTokenService.GetTokensAsync(receiverEntity, cancellationToken);
 
@@ -231,7 +231,6 @@ internal class NotificationMessageService : INotificationMessageService
             }
             else
             {
-
                 _logger.LogError($"Token not provider for this message. Uid:{message.Uid}");
 
                 message.Status = NotificationMessageStatus.Failed;
@@ -257,4 +256,13 @@ internal class NotificationMessageService : INotificationMessageService
         _logger.LogInformation($"Notification sent: Uid:{notification.Uid}");
     }
 
+    public void Dispose()
+    {
+        _notificationDbContext?.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_notificationDbContext != null) await _notificationDbContext.DisposeAsync();
+    }
 }

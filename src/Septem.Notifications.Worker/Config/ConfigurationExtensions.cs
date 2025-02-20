@@ -13,7 +13,7 @@ public static class ConfigurationExtensions
         services.AddHostedService<MessageCreateInitializationJob>();
         services.AddHostedService<MessageSendInitializationJob>();
         services.AddHostedService<ConcurrentQueueDispatcherJob>();
-        
+
         services.AddSingleton<ConcurrentQueueDispatcher>();
 
         var builder = new JobOptionsBuilder();

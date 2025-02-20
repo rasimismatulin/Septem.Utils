@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Septem.Notifications.Abstractions;
 
-public interface INotificationMessageHistoryService
+public interface INotificationMessageHistoryService : IDisposable, IAsyncDisposable
 {
     Task<ICollection<NotificationMessage>> GetNotificationHistoryAsync(Guid targetUid, NotificationTokenType tokenType, CancellationToken cancellationToken = default);
 

@@ -16,10 +16,10 @@ internal class NotificationService : INotificationService
     private readonly NotificationDbContext _notificationDbContext;
     private readonly ILogger _logger;
 
-    public NotificationService(ILoggerFactory loggerFactory, NotificationDbContext notificationDbContext)
+    public NotificationService(ILogger<NotificationService> logger, NotificationDbContext notificationDbContext)
     {
         _notificationDbContext = notificationDbContext;
-        _logger = loggerFactory.CreateLogger<NotificationService>();
+        _logger = logger;
     }
 
 
@@ -120,5 +120,15 @@ internal class NotificationService : INotificationService
 
         await _notificationDbContext.SaveChangesAsync(cancellationToken);
 
+    }
+
+    public void Dispose()
+    {
+        _notificationDbContext?.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_notificationDbContext != null) await _notificationDbContext.DisposeAsync();
     }
 }

@@ -51,7 +51,7 @@ public class JobOptionsBuilder
         TaskExecuteStrategyHandler = typeof(SynchronousTaskExecutionStrategyHandler);
 
 
-    public Type TaskExecuteStrategyHandler = typeof(ConcurrentQueueDispatcherJobStrategyHandler);
+    public Type TaskExecuteStrategyHandler = typeof(ParallelTaskExecutionStrategyHandler);
 
 
     internal static ICollection<JobInformation> CustomJobs = new List<JobInformation>();
