@@ -30,7 +30,7 @@ internal class NotificationService : INotificationService
 
     public async Task CreateNotificationAsync(Notification notification, ICollection<Receiver> receivers, CancellationToken cancellationToken)
     {
-        var groupKey = Guid.NewGuid();
+        var groupKey = Guid.CreateVersion7();
 
         if (!receivers.Any())
         {
