@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Septem.Notifications.Core.Entities;

@@ -20,4 +20,8 @@
 		<Version>3.1.0</Version>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\AnyDoc.Backend\src\AnyDoc.Backend.Shared\AnyDoc.Backend.Shared.csproj" />
+	</ItemGroup>
+
 </Project>
