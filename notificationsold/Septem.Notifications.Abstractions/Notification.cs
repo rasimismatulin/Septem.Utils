@@ -71,6 +71,7 @@ public class Notification
         GroupKey = groupKey;
         return this;
     }
+
     public Notification SetCancellationKey(string cancellationKey)
     {
         CancellationKey = cancellationKey;

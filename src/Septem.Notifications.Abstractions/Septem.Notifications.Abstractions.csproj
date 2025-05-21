@@ -1,27 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
-		<Nullable>disable</Nullable>
-		<ImplicitUsings>disable</ImplicitUsings>
-
-		<Authors>Rasim Ismatulin</Authors>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Company>Septem Tech</Company>
-		<Product>$(AssemblyName)</Product>
-		<PackageProjectUrl>https://www.septem.tech/</PackageProjectUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Abstraction for core notification service</Description>
-		<Copyright>Open source project</Copyright>
-		<RepositoryUrl>https://github.com/rasimismatulin/Septem.Utils</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>Version 3</PackageReleaseNotes>
-		<NeutralLanguage>en</NeutralLanguage>
-		<Version>3.1.0</Version>
+		<ImplicitUsings>false</ImplicitUsings>
+		<Nullable>false</Nullable>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\..\AnyDoc.Backend\src\AnyDoc.Backend.Shared\AnyDoc.Backend.Shared.csproj" />
-	</ItemGroup>
 
 </Project>

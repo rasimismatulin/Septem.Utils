@@ -242,6 +242,8 @@ internal class NotificationMessageService : INotificationMessageService
             }
         }
 
+        _logger.LogInformation("Sending {type} [{token}]\n{title}\n{payload}", token.Type, token.Token, message.Title, message.Payload);
+
         var senderService = _notificationSenderServiceProvider.GetByTokenType(token.Type);
         var result = await senderService.SendAsync(notification, message, token, cancellationToken);
 
