@@ -10,9 +10,4 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Septem.Notifications.Abstractions\Septem.Notifications.Abstractions.csproj" />
-		<ProjectReference Include="..\Septem.Notifications.Core\Septem.Notifications.Core.csproj" />
-	</ItemGroup>
-
 </Project>

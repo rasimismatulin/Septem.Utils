@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
@@ -246,11 +247,8 @@ namespace Septem.DevExtreme.AspNet.Data
 
         Expression CompileStringFunction(Expression accessorExpr, string clientOperation, string value)
         {
-            if (value != null)
-                value = value.ToLower();
-
             var invert = false;
-
+            value = WebUtility.HtmlDecode(value);
             if (clientOperation == NOT_CONTAINS)
             {
                 clientOperation = CONTAINS;
