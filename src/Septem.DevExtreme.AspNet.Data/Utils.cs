@@ -49,10 +49,25 @@ namespace Septem.DevExtreme.AspNet.Data {
             if (type == typeof(DateOnly) && value is String)
                 return DateOnly.ParseExact((string)value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
+            if (type == typeof(DateTimeOffset) && value is String)
+            {
+                var input = ((string)value).Replace(" ", "+");
+                if (DateTimeOffset.TryParseExact(
+                        input,
+                        "yyyy-MM-dd'T'HH:mm:ss.fffzzz",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out var dto))
+                {
+                    return dto;
+                }
+            }
+            
             if (type == typeof(DateTimeOffset) && value is DateTime date)
                 return new DateTimeOffset(date);
 
             var converter = TypeDescriptor.GetConverter(type);
+            
             if(converter != null && converter.CanConvertFrom(value.GetType()))
                 return converter.ConvertFrom(null, CultureInfo.InvariantCulture, value);
 

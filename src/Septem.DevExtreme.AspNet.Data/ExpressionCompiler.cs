@@ -43,7 +43,10 @@ namespace Septem.DevExtreme.AspNet.Data {
                 else if(DynamicBindingHelper.ShouldUseDynamicBinding(currentTarget.Type))
                     currentTarget = DynamicBindingHelper.CompileGetMember(currentTarget, clientExprItem);
                 else
-                    currentTarget = FixReflectedType(Expression.PropertyOrField(currentTarget, clientExprItem));
+                {
+                    var type = Expression.PropertyOrField(currentTarget, clientExprItem);
+                    currentTarget = FixReflectedType(type);
+                }
 
                 progression.Add(currentTarget);
             }

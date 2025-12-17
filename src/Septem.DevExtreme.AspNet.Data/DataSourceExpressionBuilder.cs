@@ -5,41 +5,48 @@ using System.Linq;
 using System.Linq.Expressions;
 using Septem.DevExtreme.AspNet.Data.RemoteGrouping;
 
-namespace Septem.DevExtreme.AspNet.Data {
+namespace Septem.DevExtreme.AspNet.Data
+{
 
-    class DataSourceExpressionBuilder {
+    class DataSourceExpressionBuilder
+    {
         Expression Expr;
         readonly DataSourceLoadContext Context;
 
-        public DataSourceExpressionBuilder(Expression expr, DataSourceLoadContext context) {
+        public DataSourceExpressionBuilder(Expression expr, DataSourceLoadContext context)
+        {
             Expr = expr;
             Context = context;
         }
 
-        public Expression BuildLoadExpr(bool paginate, IList filterOverride = null, IReadOnlyList<string> selectOverride = null) {
+        public Expression BuildLoadExpr(bool paginate, IList filterOverride = null, IReadOnlyList<string> selectOverride = null)
+        {
             AddFilter(filterOverride);
             AddSort();
             AddSelect(selectOverride);
-            if(paginate)
+            if (paginate)
                 AddPaging();
             return Expr;
         }
 
-        public Expression BuildCountExpr() {
+        public Expression BuildCountExpr()
+        {
             AddFilter();
             AddCount();
             return Expr;
         }
 
-        public Expression BuildLoadGroupsExpr(bool paginate, bool suppressGroups = false, bool suppressTotals = false) {
+        public Expression BuildLoadGroupsExpr(bool paginate, bool suppressGroups = false, bool suppressTotals = false)
+        {
             AddFilter();
             AddRemoteGrouping(suppressGroups, suppressTotals);
-            if(paginate)
+            if (paginate)
                 AddPaging();
             return Expr;
         }
 
-        public Expression BuildGroupCountExpr() {
+        public Expression BuildGroupCountExpr()
+        {
             AddFilter();
             Expr = CreateSelectCompiler().CompileSingle(Expr, Context.Group.Single().Selector);
             Expr = QueryableCall(nameof(Queryable.Distinct));
@@ -47,8 +54,10 @@ namespace Septem.DevExtreme.AspNet.Data {
             return Expr;
         }
 
-        void AddFilter(IList filterOverride = null) {
-            if(filterOverride != null || Context.HasFilter) {
+        void AddFilter(IList filterOverride = null)
+        {
+            if (filterOverride != null || Context.HasFilter)
+            {
                 var filterExpr = filterOverride != null && filterOverride.Count < 1
                     ? Expression.Lambda(Expression.Constant(false), Expression.Parameter(GetItemType()))
                     : new FilterExpressionCompiler(GetItemType(), Context.GuardNulls, Context.UseStringToLower, Context.SupportsEqualsMethod, Context.UseNpgILikeFunction).Compile(filterOverride ?? Context.Filter);
@@ -57,25 +66,29 @@ namespace Septem.DevExtreme.AspNet.Data {
             }
         }
 
-        void AddSort() {
-            if(Context.HasAnySort)
+        void AddSort()
+        {
+            if (Context.HasAnySort)
                 Expr = new SortExpressionCompiler(GetItemType(), Context.GuardNulls).Compile(Expr, Context.GetFullSort());
         }
 
-        void AddSelect(IReadOnlyList<string> selectOverride = null) {
-            if(selectOverride != null || Context.HasAnySelect && Context.UseRemoteSelect)
+        void AddSelect(IReadOnlyList<string> selectOverride = null)
+        {
+            if (selectOverride != null || Context.HasAnySelect && Context.UseRemoteSelect)
                 Expr = CreateSelectCompiler().Compile(Expr, selectOverride ?? Context.FullSelect);
         }
 
-        void AddPaging() {
-            if(Context.Skip > 0)
+        void AddPaging()
+        {
+            if (Context.Skip > 0)
                 Expr = QueryableCall(nameof(Queryable.Skip), Expression.Constant(Context.Skip));
 
-            if(Context.Take > 0)
+            if (Context.Take > 0)
                 Expr = QueryableCall(nameof(Queryable.Take), Expression.Constant(Context.Take));
         }
 
-        void AddRemoteGrouping(bool suppressGroups, bool suppressTotals) {
+        void AddRemoteGrouping(bool suppressGroups, bool suppressTotals)
+        {
             var compiler = new RemoteGroupExpressionCompiler(
                 GetItemType(), Context.GuardNulls, Context.ExpandLinqSumType, Context.CreateAnonTypeNewTweaks(),
                 suppressGroups ? null : Context.Group,
@@ -85,7 +98,8 @@ namespace Septem.DevExtreme.AspNet.Data {
             Expr = compiler.Compile(Expr);
         }
 
-        void AddCount() {
+        void AddCount()
+        {
             Expr = QueryableCall(nameof(Queryable.Count));
         }
 
@@ -98,11 +112,12 @@ namespace Septem.DevExtreme.AspNet.Data {
         Expression QueryableCall(string methodName, Expression arg)
             => Expression.Call(typeof(Queryable), methodName, GetQueryableGenericArguments(), Expr, arg);
 
-        Type[] GetQueryableGenericArguments() {
+        Type[] GetQueryableGenericArguments()
+        {
             const string queryable1 = "IQueryable`1";
             var type = Expr.Type;
 
-            if(type.IsInterface && type.Name == queryable1)
+            if (type.IsInterface && type.Name == queryable1)
                 return type.GenericTypeArguments;
 
             return type.GetInterface(queryable1).GenericTypeArguments;
